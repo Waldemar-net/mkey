@@ -91,10 +91,10 @@ WSGI_APPLICATION = 'grigorevs.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mkeytop',
-        'USER' : 'mkeytop',
+        'NAME': 'mkey',
+        'USER' : 'mkey',
         'PASSWORD' : 'Volodika20',
-        'HOST' : 'pg3.sweb.ru',
+        'HOST' : 'localhost',
         'PORT' : '5432',
     }
 }
