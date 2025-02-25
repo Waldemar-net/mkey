@@ -97,6 +97,8 @@ def contact_view(request):
 
     return render(request, 'main/support.html', {'form': form})
 
+def handler500(request):
+    return render(request, '500.html', status=500)
 
 def get_404(request):
     context = {
