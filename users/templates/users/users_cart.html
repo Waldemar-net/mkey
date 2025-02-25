@@ -1,0 +1,46 @@
+{% extends "profbase.html" %}
+{% load static %}
+
+{% block prof_content %}
+            <!-- Контент на странице -->
+            <div class="row" >
+                <div class="container mt-2 " style="box-shadow: none;">
+                    <div class="row justify-content-center">
+                        <div class=" p-4 mb-4 mx-2 rounded custom-shadow carts-fiel-button" style="box-shadow: none;">
+                            <h3 class="text-center mb-4 text-white">Корзина <span id="goods-in-cart-counts" style="color:rgb(247, 185, 93);">{{carts|length}}</span></h3>
+                            <div>
+                                {% if carts|length == 0 %}
+                                <div class="row">
+                                    <div class="col text-center carts-img-next">
+                                        <img src="{% static "deps/images/basket2-fill.png" %}" alt="" style="">
+                                    </div>
+                                    <div class="col text-center text-carts-null">
+                                        <h1>Ваша корзина пуста. </h1>
+                                        <p>Но не переживайте, у нас огромный выбор игр для всех возрастов и предпочтений. Продолжайте покупки и наполняйте свою корзину увлекательными приключениями!</p>
+                                        <a href="{% url 'catalog:index' 'all'%}">Перейти в каталог</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div id="display-block">
+                    
+                                <div class="row">
+                                    <div class="col text-center carts-img-next">
+                                        <img src="{% static "deps/images/basket2-fill.png" %}" alt="" style="">
+                                    </div>
+                                    <div class="col text-center text-carts-null">
+                                        <h1>Ваша корзина пуста. </h1>
+                                        <p>Но не переживайте, у нас огромный выбор игр для всех возрастов и предпочтений. Продолжайте покупки и наполняйте свою корзину увлекательными приключениями!</p>
+                                        <a href="{% url 'catalog:index' 'all'%}">Перейти в каталог</a>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <!-- Разметка корзины -->
+                            {% include "carts/includes/included_cart.html" %}
+                            <!-- Закончилась разметка корзины -->
+                        </div>
+                    </div> 
+                </div>
+            </div>
+{% endblock  %}

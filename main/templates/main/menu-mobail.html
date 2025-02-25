@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load static %}
+{% load goods_tags %}
+
+{% block content %}
+<div class="row">
+    <div class="col p-3 d-md-none text-white">
+        <h4>Категории</h4>
+        {% for category_item in category %}
+            <div class="row item-list-c-m">
+                <a href="{% url "catalog:index" category_item.slug %}">{{category_item.name}}</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col p-3 d-md-none text-white">
+        <h4>Жанры</h4>
+        {% for genre_item in genre %}
+            <div class="row item-list-c-m">
+                <a href="{% url 'catalog:index' 'all' %}?order_by=default&genry={{ genre_item.name|urlencode }}">{{genre_item.name}}</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+<div class="row">
+    <div class="col p-3 d-md-none text-white leng-span-title">
+        <h4>Издатели <span>{{publisher|length}}</span></h4>
+        {% for publisher_item in publisher|slice:"0:5" %}
+            <div class="row item-list-c-m">
+                <a href="{% url "publisher:publisher" publisher_item.slug%}">{{publisher_item.name}}</a>
+            </div>
+        {% endfor %}
+        {% if publisher|length >= 5 %}
+            <div class="row item-list-c-m">
+                <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(247, 185, 93);" href="{% url "publishers:publishers" %}">Все издатели</a>
+            </div>
+        {% endif %}
+        
+    </div>
+</div>
+<div class="row">
+    <div class="col p-3 d-md-none text-white leng-span-title">
+        <h4>Разработчики <span>{{developer|length}}</span></h4>
+        
+        {% for developer_item in developer|slice:"0:5" %}
+            <div class="row item-list-c-m">
+                <a href="{% url "developer:developer" developer_item.slug%}">{{developer_item.name}}</a>
+            </div>
+        {% endfor %}
+        {% if developer|length >= 5 %}
+            <div class="row item-list-c-m">
+                <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(247, 185, 93);" href="{% url "developers:developers" %}">Все разработчки</a>
+            </div>
+        {% endif %}
+        
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% load static %}
+{% load carts_tags %}
+
+{% user_carts request as carts %}
+    <div class="container" id="cart-items-container">
+        <div class=" mb-3 " style="border:none; border-radius:0;">
+            {% for cart in carts %}
+                <ul class=" list-group-flush carts-profile d-none d-md-block mt-2" style="background-color: rgb(32, 32, 32); padding: 1% 0;">
+                    <li class="list-group-item ">
+                        <div class="row  button-add-carts">
+                            <div class="col-md-2">
+                                <a href="{% url "goods:product" cart.product.slug%}"><img src="/media/{{cart.product.image}}" alt="" style="max-width: 100%; border-radius:20px;"></a>
+                                
+                            </div>
+                            
+                            <div class="col div-order-message">
+                                {%tag_Key cart.product as keys%}
+                                <h5 class="card-title div-order-message">{{cart.product.name}}{% if not keys%}<h4 style="font-size: 16px; margin-top: 5px;">Нет в наличии</h4>{% endif %}</h5>
+                                
+                                
+                                    
+                                
+                                <div class="col ">
+                                {% if  cart.product.discount%}
+                                    <span style="left:0; color: rgb(247, 185, 93); font-family: Multiround;">{{cart.product.sale_price}} ₽ <s style="color: rgb(192,198,198);">{{cart.product.price}} ₽</s></span>
+                                    <span class="text-dark ms-2 d-discount-carts">- {{cart.product.discount}} %</span>
+                                {%else%}
+                                    <strong>{{cart.product.sale_price}} ₽</strong>
+                                {%endif%}
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col ">
+                                        <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Сервис активации: <span style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{cart.product.services}}</span></p>
+                                    </div>
+                                    <div class="col">
+                                        <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Регион активации: <span style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{cart.product.region}}</span></p>
+                                    </div>
+                                </div>
+                               
+                                
+                                
+                                
+                            </div>
+                            <div class="col-md-2 ">
+                                <a href="{% url "cart:cart_remove"%}" class="remove-from-cart" data-cart-id="{{cart.id}}" style="float:right;">
+                                    {% csrf_token %}
+                                    <img class="mx-1" src="{% static "deps/icons/trash3-fill.svg" %}"
+                                        alt="Catalog Icon" width="32" height="32">
+                                </a>
+                            </div>
+                            
+                            
+                        </div>
+                    </li>
+                    
+                </ul>
+        
+                <ul class="text-center cartss-profile d-md-none" style="background:none; background-color: none;">
+                    <li class="list-group-item " style="background:none; background-color: none;">
+                        <div class="row  button-add-carts" style="background: none; background-color: none;">
+                            <div class="col" style="background:none; background-color: none;">
+                                <a href="{% url "cart:cart_remove"%}" class="remove-from-cart" data-cart-id="{{cart.id}}" style="float:right;">
+                                    {% csrf_token %}
+                                    <img class="mt-2" src="{% static "deps/icons/trash3-fill.svg" %}"
+                                        alt="Catalog Icon" width="32" height="32">
+                                </a>
+                            </div>
+                            <div class="col-md-2" style="background:none; background-color: none;">
+                                
+                                <a href="{% url "goods:product" cart.product.slug%}"><img src="/media/{{cart.product.image}}" alt="" style="max-width: 60%; border-radius: 20px;"></a>
+                                
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">{{cart.product.name}}</h5>
+                                <div class="col ">
+                                {% if  cart.product.discount%}
+                                    <span style="left:0; color: rgb(247, 185, 93); font-family: Multiround; font-size: 12px;">{{cart.product.sale_price}} ₽ <s style="color: rgb(192,198,198); font-size: 10px;">{{cart.product.price}} ₽</s></span>
+                                    
+                                    <span class="text-dark ms-2 d-discount-carts " style="font-size: 10px;">- {{cart.product.discount}} %</span>
+                                {%else%}
+                                    
+                                    <strong>{{cart.product.sale_price}} ₽</strong>
+                                {%endif%}
+                                    
+                                </div>
+                                <hr>
+                                <div class="row ">
+                                    <div class="col ">
+                                        <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Сервис активации: <br><span style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{cart.product.services}}</span></p>
+                                    </div>
+                                    <div class="col ">
+                                        <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Регион активации: <br><span style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{cart.product.region}}</span></p>
+                                    </div>
+                                </div>
+                                
+                                    
+                                    
+                            </div>
+                            
+                            
+                        </div>
+                    </li>
+                </ul>
+                
+            {% endfor %}
+            {% if carts|length != 0%}
+                <div class=" mb-0 carts-fiel" style="border:none; background: none;">
+                    <div class="card-footer">
+                        <p class="float-left">Итого <span class="ms-3" style="color: rgb(243, 243, 243);">{{carts.total_price}} ₽</span></p>
+                    </div>
+                </div>
+                
+            
+        </div>
+        {% if carts %}
+            {% if not user.is_authenticated %}
+                <a href="{% url "user:login" %}">
+                    Оформить заказ
+                </a>
+            {% else %}
+            <form action="{% url "orders:create_order" %}" method="POST">
+                {% csrf_token %}
+                <input type="hidden" for="" name="first_name" value="{% if user.first_name%}{{user.first_name}}{%endif%}" ></input>
+                <input type="hidden" for="" name="last_name" value="{% if user.last_name%}{{user.last_name}}{%endif%}"></input>
+                <input type="hidden" for="" name="email" value="{% if user.email%}{{user.email}}{%endif%}"></input>
+                <input type="hidden" for="" name="username" value="{% if user.username%}{{user.username}}{%endif%}"></input>
+                <button class="cart-payments-open">
+                    Оплатить
+                </button>
+            </form>
+            {% endif %}
+            {% endif %}
+        {% endif %}
+        
+        <!-- Закончилась разметка корзины -->
+    </div>
+
+    
+        

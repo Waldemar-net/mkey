@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="margin-top: 150px;">
+    <h2 style="font-family:'Multiround'; 
+  color: rgb(230, 230, 230); font-size: 16px;">Административная панель MKEY</h2>
+    <div class="row mt-5">
+            <div class="admin-panel-li">
+                <img src="{% static "deps/icons/game.svg" %}" alt="">
+                <a href="{% url "main:game-add" %}">Добавить игру</a>
+            </div>
+       
+    </div>
+</div>
+{% endblock %}

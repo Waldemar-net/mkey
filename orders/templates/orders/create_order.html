@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% load static %}
+{% load carts_tags %}
+
+
+{% block prof_content %}
+
+<div class="p-4 mb-4 mx-2 rounded custom-shadow display-top-pad" style="border:none; background-color: rgb(31, 31, 31);">
+    <div class="container">
+        <h3 class="text-center mb-4">Выбранные товары</h3>
+        <div class="container" id="cart-items-container">
+            <!-- Разметка корзины -->
+            {% user_carts request as carts %}
+            {% include "carts/includes/included_cart.html" %}
+            <!-- Закончилась разметка корзины -->
+        </div>
+    </div>
+    <!-- Детали заказа -->
+    <div class="container">
+        <h3 class="text-center">Детали заказа</h3>
+        <div class="card mb-3">
+            <div class="card-body">
+                <form action="{% url "orders:create_order" %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <input for="" name="first_name" ></input>
+                    <input for="" name="last_name" value="{% if form.last_name.value%}{{form.last_name.value}}{%endif%}"></input>
+                    <input for="" name="email" value="{% if form.email.value%}{{form.email.value}}{%endif%}"></input>
+                    <input for="" name="username" value="{% if form.username.value%}{{form.username.value}}{%endif%}"></input>
+                    <a href="{% url "orders:create_order" %}">
+                        Оплатить
+                    </a>
+                   
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

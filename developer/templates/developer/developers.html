@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load goods_tags %}
+
+
+{% block content %}
+
+<body class="bg-fronts-developer" >
+    <div class="container display-top-pad ">
+        <div class="row navigation-panel-product ">
+            <div class="col d-none d-md-block ">
+                <hr style="color: white;">
+            </div>
+            <div class="col-auto mr-auto text-center d-none d-md-block">
+                <a href="{% url "main:index" %}">Главная</a>
+            </div>
+            <div class="col-md-1 ml-md-auto mr-auto d-none d-md-block">
+                <hr style="color: white;">
+            </div>
+            <div class="col-auto mr-auto text-center d-none d-md-block">
+                <a href="#">Разработчики</a>
+            </div>
+            <div class="col d-none d-md-block">
+                <hr style="color: white;">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col coll-developer-game mt-5">
+                <h2 class="ms-">Разработчики <span class=" mt-4">{{developers_int|length}}</span></h2>
+            </div>
+        </div>
+        <div class="row">
+            {% for developerp in developers %}
+                <div class="col-lg-3 col-md-5 p-3 d-none d-md-block text-white ">
+                    
+                    <div class="developer-block-name text-center">
+                        {% if developerp.image %}
+                            <a href="{% url "developer:developer" developerp.slug %}"><img src="{{ developerp.image.url }}" alt=""></a>
+                        {% endif %}
+                        <br>
+                        <a href="{% url "developer:developer" developerp.slug %}">{{developerp.name}}</a>
+                        
+                        
+                        {% tag_LenGameDeveloper developerp as int_game %}
+                        <div class="coll-game-developer mt-1">
+                            <p>{{ int_game|length|game_declension }}</p>
+                        </div>    
+                    </div>
+                     
+                </div>
+                
+            {% endfor %}
+        </div>
+        <div class="row">
+            {% for developerp in developers %}
+                <div class="col-6 col-lg-6 col-md-6 col-sm-12 p-3 d-md-none  text-white ">
+                    
+                    <div class="developer-block-name text-center">
+                        {% if developerp.image %}
+                            <a class="mt-4" href="{% url "developer:developer" developerp.slug %}"><img src="{{ developerp.image.url }}" alt=""></a>
+                            <a href="{% url "developer:developer" developerp.slug %}">{{developerp.name}}</a>
+                        {% else %}
+                            <br>
+                            <a class="mt-5" href="{% url "developer:developer" developerp.slug %}">{{developerp.name}}</a>
+                        {% endif %}
+                        
+                        
+                        
+                        
+                        {% tag_LenGameDeveloper developerp as int_game %}
+                        <div class="coll-game-developer mt-1">
+                            <p>{{ int_game|length|game_declension }}</p>
+                        </div>    
+                    </div>
+                     
+                </div>
+                
+            {% endfor %}
+        </div>
+    </div>
+    {% comment "" %}
+    <div class="row display-top-pad" >
+        <div class="text-center text-white">
+            
+            <hr class="w-50" style="margin: auto;">
+            <div class="row mt-3">
+                {% for developerp in developers %}
+                    <div class="col-6 col-lg-6 col-md-6 col-sm-12 p-2 image-developers developer-game-intro">
+                        <div class="developers-bock-img-text">
+                            {% if developerp.image %}
+                                <a href="{% url "developer:developer" developerp.slug %}"><img src="{{ developerp.image.url }}" alt=""></a>
+                            {% else %}
+                                <a href="{% url "developer:developer" developerp.slug %}">{{developerp.name}}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                {% endfor %}
+                
+            </div>
+                 
+        </div>
+    </div>
+    {% endcomment %}
+    <div class="container-pag mt-5">
+        <ul class=" paginations">
+            <li class="{% if not developers.has_previous %}disabled{% endif %}">
+                <a href="{% if developers.has_previous %}?{% change_params page=developers.previous_page_number %}
+                {% else %}
+                #
+                {% endif %}
+                ">Назад</a>
+            </li>
+            {% for page in developers.paginator.page_range %}
+            {% if page >= developers.number|add:-2 and page <= developers.number|add:2 %}
+                <li class="{% if developers.number == page %}active{% endif %}">
+                    <a href="?{% change_params page=page %}">{{page}}</a>
+                </li>
+            {% endif %}
+                
+            {% endfor %}
+            <li class="{% if not developers.has_next %}disabled{% endif %}">
+                <a href="{% if developers.has_next %}?{% change_params page=developers.next_page_number %}
+                {% else %}
+                #
+                {% endif %}">Далее</a>
+            </li>
+        </ul>
+    </div>
+    
+</body>
+{% endblock %}

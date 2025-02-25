@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load static %} 
+{% load goods_tags %}
+
+{% block contents %}
+<div class="container text-center found-404" style="margin-top: 200px;">
+    <img src="{% static "deps/favicon/mkey.png" %}" alt="" style="width: 200px; height: 200px;">
+    <h1>500</h1>
+    <h3>Страница не найдена</h3>
+    <a href="{% url "main:index" %}">Вернуться на главную</a>
+</div>
+{% endblock %}

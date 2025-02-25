@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load goods_tags %}
+
+
+{% block content %}
+<body class="bg-fronts-developer" >
+    <div class="container display-top-pad ">
+        <div class="row navigation-panel-product ">
+            <div class="col d-none d-md-block ">
+                <hr style="color: white;">
+            </div>
+            <div class="col-auto mr-auto text-center d-none d-md-block">
+                <a href="{% url "main:index" %}">Главная</a>
+            </div>
+            <div class="col-md-1 ml-md-auto mr-auto d-none d-md-block">
+                <hr style="color: white;">
+            </div>
+            <div class="col-auto mr-auto text-center d-none d-md-block">
+                <a href="#">Издатели</a>
+            </div>
+            <div class="col d-none d-md-block">
+                <hr style="color: white;">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col coll-developer-game mt-5">
+                <h2 class="ms-">Издатели <span class=" mt-4">{{publishers_int|length}}</span></h2>
+            </div>
+        </div>
+        <div class="row">
+            {% for publisher in publishers %}
+                <div class="col-lg-3 col-md-5 p-3 d-none d-md-block text-white ">
+                    
+                    <div class="developer-block-name text-center">
+                        {% if publisher.image %}
+                            <a href="{% url "publisher:publisher" publisher.slug %}"><img src="{{ publisher.image.url }}" alt=""></a>
+                        {% endif %}
+                        <br>
+                        <a href="{% url "publisher:publisher" publisher.slug %}">{{publisher.name}}</a>
+                        
+                        
+                        {% tag_LenGamePublisher publisher as int_game %}
+                        <div class="coll-game-developer mt-1">
+                            <p>{{ int_game|length|game_declension }}</p>
+                        </div>    
+                    </div>
+                     
+                </div>
+                
+            {% endfor %}
+        </div>
+        <div class="row">
+            {% for publisher in publishers %}
+                <div class="col-6 col-lg-6 col-md-6 col-sm-12 p-3 d-md-none  text-white ">
+                    
+                    <div class="developer-block-name text-center">
+                        {% if publisher.image %}
+                            <a class="mt-4" href="{% url "publisher:publisher" publisher.slug %}"><img src="{{ publisher.image.url }}" alt=""></a>
+                            <a href="{% url "publisher:publisher" publisher.slug %}">{{publisher.name}}</a>
+                        {% else %}
+                            <br>
+                            <a class="mt-5" href="{% url "publisher:publisher" publisher.slug %}">{{publisher.name}}</a>
+                        {% endif %}
+                        
+                        
+                        
+                        
+                        {% tag_LenGamePublisher publisher as int_game %}
+                        <div class="coll-game-developer mt-1">
+                            <p>{{ int_game|length|game_declension }}</p>
+                        </div>    
+                    </div>
+                     
+                </div>
+                
+            {% endfor %}
+        </div>
+    </div>
+    
+    <div class="container-pag mt-5">
+        <ul class=" paginations">
+            <li class="{% if not publishers.has_previous %}disabled{% endif %}">
+                <a href="{% if publishers.has_previous %}?{% change_params page=publishers.previous_page_number %}
+                {% else %}
+                #
+                {% endif %}
+                ">Назад</a>
+            </li>
+            {% for page in publishers.paginator.page_range %}
+            {% if page >= publishers.number|add:-2 and page <= publishers.number|add:2 %}
+                <li class="{% if publishers.number == page %}active{% endif %}">
+                    <a href="?{% change_params page=page %}">{{page}}</a>
+                </li>
+            {% endif %}
+                
+            {% endfor %}
+            <li class="{% if not publishers.has_next %}disabled{% endif %}">
+                <a href="{% if publishers.has_next %}?{% change_params page=publishers.next_page_number %}
+                {% else %}
+                #
+                {% endif %}">Далее</a>
+            </li>
+        </ul>
+    </div>
+    
+</body>
+{% endblock %}

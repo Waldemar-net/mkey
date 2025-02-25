@@ -1,0 +1,78 @@
+{% extends "profbase.html" %}
+{% load static %}
+{% load goods_tags %}
+
+{% block prof_content %}
+<div class="col mb-3 menu-profile-label text-white" >
+    
+    <div class="text-center mt-3">
+        <h4 style="
+        font-family:'Multiround';">Профиль</h4>
+        {% if user.image %}
+        <img src="{{ user.image.url }}"
+            alt="Аватар пользователя" class="img-fluid rounded-circle mt-3"
+            >
+        {% else %}
+        <img src="{% static "/deps/images/baseavatar.png" %}"
+            alt="Аватар пользователя" class="img-fluid rounded-circle mt-3"
+            >
+        
+        {% endif %}
+        <h4 style="padding: 1% 0;">{{user.first_name}} {{user.last_name}}</h4>
+        {% comment "" %}
+        <div class="row mt-4 ">
+            <h4>{{user.first_name}} {{user.last_name}}</h4>
+            <h6 class="mt-1">До следующего уровня осталось: 2000р</h6>
+            
+        </div>
+        {% endcomment %}
+        {% comment "" %}
+        <div class="row progress-image text-center">
+            <div class="col-md-15 mt-3">
+                {% if user.discount == 0 %}
+                    <img src="{% static "/deps/images/lvl0.png" %}" alt="">
+                {% elif user.discount >= 2 and  user.discount <= 4 %}
+                    <img src="{% static "/deps/images/lvl1.png" %}" alt="">
+                {% elif user.discount >= 5 and  user.discount <= 6 %}
+                    <img src="{% static "/deps/images/lvl2.png" %}" alt="">
+                {% elif user.discount >= 7 and  user.discount <= 9 %}
+                    <img src="{% static "/deps/images/lvl3.png" %}" alt="">
+                {% elif user.discount >= 10 and  user.discount <= 12 %}
+                    <img src="{% static "/deps/images/lvl4.png" %}" alt="">
+                {% elif user.discount >= 13 and  user.discount <= 15 %}
+                    <img src="{% static "/deps/images/lvl5.png" %}" alt="">
+                {% endif %}
+                
+            </div>
+            
+        </div>
+        {% endcomment %}
+        <hr>
+    </div>
+    <div class="row  mt-4 col-md-15">
+        {%tag_Orders user as order%}
+
+        <div class="col progress-market-buy text-center">
+            <h2 class="mt-3">{{order|length}}</h2>
+            <h5 class="mt-2">Куплено игр</h5>
+        </div>
+        {% comment "" %}
+        <div class="col progress-market-buy text-center">
+            
+            <h2 class="mt-3">{{user.discount}}%</h2>
+            
+            <h5 class="mt-2">Уровень скидки</h5>
+            
+        </div>
+        <div class="col progress-market-buy text-center">
+            
+            <h2 class="mt-3">10000 руб.</h2>
+            
+            <h5 class="mt-2">Сумма выкупа</h5>
+            
+        </div>
+        {% endcomment %}
+        
+    </div>
+</div>
+{% endblock prof_content %}

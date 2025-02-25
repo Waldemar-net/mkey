@@ -1,0 +1,352 @@
+{% extends "base.html" %}
+{% load static %}
+{% load goods_tags %}
+
+{% block content %}
+<body style="background-image: url({% static "deps/images/bg01.jpg" %})">
+<div class="container display-top-pad">   
+    <div class="row navigation-panel-product">
+        <div class="col d-none d-md-block ">
+            <hr style="color: white;">
+        </div>
+        <div class="col-auto mr-auto text-center d-none d-md-block">
+            <a href="{% url "main:index" %}">Главная</a>
+        </div>
+        <div class="col-md-1 ml-md-auto mr-auto d-none d-md-block">
+            <hr style="color: white;">
+        </div>
+        <div class="col-auto mr-auto text-center d-none d-md-block">
+            <a href="#">Каталог игр</a>
+        </div>
+        <div class="col d-none d-md-block">
+            <hr style="color: white;">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col coll-developer-game mt-5">
+            <h2 class="ms-">Каталог игр <span class=" mt-4">{{goods|length}}</span></h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="row  d-none d-md-block">
+            <form action="{% if request.GET.q %}{% url "catalog:search" %}{% else %}{% url "catalog:index" slug_url %}{% endif %}">
+                <div class="col main-filter mt-3">
+                    <select name="order_by">
+                        {% if request.GET.order_by == 'default'%}
+                            <option disabled>Сортировать</option>
+                            <option value="default" selected>По умолчанию</option>
+                            <option value="price">От дешевых к дорогим</option>
+                            <option value="-price">От дорогих к дешевым</option>
+                        {% elif request.GET.order_by == 'price'%}
+                            <option disabled>Сортировать</option>
+                            <option value="default">По умолчанию</option>
+                            <option value="price" selected>От дешевых к дорогим</option>
+                            <option value="-price">От дорогих к дешевым</option>
+                        {% elif request.GET.order_by == '-price'%}
+                            <option disabled>Сортировать</option>
+                            <option value="default">По умолчанию</option>
+                            <option value="price">От дешевых к дорогим</option>
+                            <option value="-price" selected>От дорогих к дешевым</option>
+                        {% else %}
+                            <option selected disabled>Сортировать</option>
+                            <option value="default">По умолчанию</option>
+                            <option value="price">От дешевых к дорогим</option>
+                            <option value="-price">От дорогих к дешевым</option>
+                        {% endif %}
+
+                    </select>
+                    <select name="genry" id="" value="genry">
+                        {% if request.GET.genry%}
+                            {% if  request.GET.genry == 'Все'%}
+                                <option selected>{{request.GET.genry}}</option>
+                                {% for genry in genre %}
+                                    <option>{{genry}}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option selected>{{request.GET.genry}}</option>
+                                <option>Все</option>
+                                {% for genry in genre %}
+                                    <option>{{genry}}</option>
+                                {% endfor %}
+                            {% endif %}
+                    
+                        {% else %}
+                            <option selected>Все</option>
+                            {% for genry in genre%}
+                                <option>{{genry}}</option>
+                            {% endfor %}
+                        {% endif %}
+                    </select>
+                    <select name="on_sale" value="{{ request.GET.q }}" id="">
+                        {% if request.GET.on_sale == 'on' %}
+                            <option value="on_sale" disabled>Метки</option>
+                            <option value="on" selected>По акции</option>
+                        {% else %}
+                            <option value="on_sale" selected disabled>Метки</option>
+                            <option value="on">По акции</option>
+                        {% endif %}
+                    </select>
+                    <button type="submit" class="d-filter-button ms-5">Применить</button>
+                    
+                </div>
+                <hr class="mt-5 ms-5" style="background: white; ">
+            </form>
+        </div>
+        <div class="row text-center d-md-none">
+            <form action="{% if request.GET.q %}{% url "catalog:search" %}{% else %}{% url "catalog:index" slug_url %}{% endif %}">
+                <div class="filters-cl-button">
+                    <a href="#" id="filter-toggle"><img src="{% static "deps/icons/filters.svg" %}" alt=""></a>
+                </div>
+                <div class="filter-block-main-mb" id="filter-block" style="display: none;">
+                        <div class="main-filters text-center">
+                            <select name="order_by">
+                                {% if request.GET.order_by == 'default'%}
+                                    <option disabled>Сортировать</option>
+                                    <option value="default" selected>По умолчанию</option>
+                                    <option value="price">От дешевых к дорогим</option>
+                                    <option value="-price">От дорогих к дешевым</option>
+                                {% elif request.GET.order_by == 'price'%}
+                                    <option disabled>Сортировать</option>
+                                    <option value="default">По умолчанию</option>
+                                    <option value="price" selected>От дешевых к дорогим</option>
+                                    <option value="-price">От дорогих к дешевым</option>
+                                {% elif request.GET.order_by == '-price'%}
+                                    <option disabled>Сортировать</option>
+                                    <option value="default">По умолчанию</option>
+                                    <option value="price">От дешевых к дорогим</option>
+                                    <option value="-price" selected>От дорогих к дешевым</option>
+                                {% else %}
+                                    <option selected disabled>Сортировать</option>
+                                    <option value="default">По умолчанию</option>
+                                    <option value="price">От дешевых к дорогим</option>
+                                    <option value="-price">От дорогих к дешевым</option>
+                                {% endif %}
+            
+                            </select>
+                            <select name="genry" id="" value="genry">
+                                {% if request.GET.genry%}
+                                    {% if  request.GET.genry == 'Все'%}
+                                        <option selected>{{request.GET.genry}}</option>
+                                        {% for genry in genre %}
+                                            <option>{{genry}}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        <option selected>{{request.GET.genry}}</option>
+                                        <option>Все</option>
+                                        {% for genry in genre %}
+                                            <option>{{genry}}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                            
+                                {% else %}
+                                    <option selected>Все</option>
+                                    {% for genry in genre%}
+                                        <option>{{genry}}</option>
+                                    {% endfor %}
+                                {% endif %}
+                            </select>
+                            
+                            <select name="on_sale" value="{{ request.GET.q }}" id="">
+                                    {% if request.GET.on_sale == 'on' %}
+                                        <option value="on_sale" disabled>Метки</option>
+                                        <option value="on" selected>По акции</option>
+                                    {% else %}
+                                        <option value="on_sale" selected disabled>Метки</option>
+                                        <option value="on">По акции</option>
+                                    {% endif %}
+                            </select>
+                            <button type="submit" class="d-filter-button">Применить</button>
+                       
+                            
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        
+        {% for product in  goods%}
+        {%tag_Key product as keys%}
+        
+            <div class="col-lg-3 col-md-5 p-3 d-none d-md-block text-white ">
+                
+                    {%tag_GetCart product as carts_game%}
+                    <div class="col d_product_pool" style="margin-left: 5px;">
+                        <div class="d_image_product" style="padding:0;">
+                            <a href="{% url 'goods:product' product.slug %}">
+                                <img src="{{ product.image.url }}" class="img-fluid gallery-image" style="padding: 0px 5px;" alt="...">
+                            </a>
+                        </div>
+                        <div class="d_slider_product">
+                            <div class="d_slider_absolute_product">
+                                <div class="d_price_product">
+                                    {% if product.discount %}
+                                    <div class="d_discount_product">
+                                        <h4>{{ product.name }}</h4>
+                                        <h6>
+                                            <s>{{ product.price }} ₽</s> 
+                                            <strong>{{ product.sale_price }} ₽</strong>
+                                            <span style="color: rgb(247, 185, 93); padding: 5px 5px;">-{{ product.discount }} %</span>
+                                            {% if not keys %}
+                                            <div class="d_img_product_no_cart">
+                                                <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                            </div>
+                                            {% else %}
+                                                {% if carts_game %}
+                                                <div class="d_img_product_cart">
+                                                    <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                                        {% csrf_token %}
+                                                        <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                    </a>
+                                                </div>
+                                                {% else %}
+                                                <div class="d_img_product_cart_select">
+                                                    <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                    {% else %}
+                                    <div class="d_discount_product">
+                                        <h4>{{ product.name }}</h4>
+                                        <h6>{{ product.price }} ₽
+                                            {% if not keys %}
+                                            <div class="d_img_product_no_cart">
+                                                <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                                    {% csrf_token %}
+                                                    <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                </a>
+                                            </div>
+                                            {% else %}
+                                                {% if carts_game %}
+                                                <div class="d_img_product_cart">
+                                                    <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                                        {% csrf_token %}
+                                                        <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                    </a>
+                                                </div>
+                                                {% else %}
+                                                <div class="d_img_product_cart_select">
+                                                    <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </h6> 
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+            </div>
+        
+        {% endfor %}
+        
+        {% for product in goods %}
+                <div class="col-6 col-lg-6 col-md-6 col-sm-12 p-3 d-md-none border-radius: 5px; text-white">
+                    {%tag_GetCart product as carts_game%}
+                    <div class="col d_product_pool" style="margin-left: 5px;">
+                        <div class="d_image_product" style="padding:0;">
+                            <a href="{% url 'goods:product' product.slug %}">
+                                <img src="{{ product.image.url }}" class="img-fluid gallery-image" style="padding: 0px 5px;" alt="...">
+                            </a>
+                        </div>
+                        <div class="d_slider_product">
+                            <div class="d_slider_absolute_product">
+                                <div class="d_price_product">
+                                    {% if product.discount %}
+                                    <div class="d_discount_product">
+                                        <h4>{{ product.name }}</h4>
+                                        <h6>
+                                            <s>{{ product.price }} ₽</s> 
+                                            <strong>{{ product.sale_price }} ₽</strong>
+                                            <span style="color: rgb(247, 185, 93); padding: 5px 5px;">-{{ product.discount }} %</span>
+                                            {% if not keys %}
+                                            <div class="d_img_product_no_cart">
+                                                <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                            </div>
+                                            {% else %}
+                                                {% if carts_game %}
+                                                <div class="d_img_product_cart">
+                                                    <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                                        {% csrf_token %}
+                                                        <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                    </a>
+                                                </div>
+                                                {% else %}
+                                                <div class="d_img_product_cart_select">
+                                                    <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+                                    {% else %}
+                                    <div class="d_discount_product">
+                                        <h4>{{ product.name }}</h4>
+                                        <h6>{{ product.price }} ₽
+                                            {% if not keys %}
+                                            <div class="d_img_product_no_cart">
+                                                <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                                    {% csrf_token %}
+                                                    <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                </a>
+                                            </div>
+                                            {% else %}
+                                                {% if carts_game %}
+                                                <div class="d_img_product_cart">
+                                                    <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ product.id }}">
+                                                        {% csrf_token %}
+                                                        <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                    </a>
+                                                </div>
+                                                {% else %}
+                                                <div class="d_img_product_cart_select">
+                                                    <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                </div>
+                                                {% endif %}
+                                            {% endif %}
+                                        </h6> 
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        {% endfor %}
+        
+        <!-- Карта товара -->
+        
+    </div>
+    <!-- Пагинация -->
+    <div class="container-pag">
+        <ul class=" paginations">
+            <li class="{% if not goods.has_previous %}disabled{% endif %}">
+                <a href="{% if goods.has_previous %}?{% change_params page=goods.previous_page_number %}
+                {% else %}
+                #
+                {% endif %}
+                ">Назад</a>
+            </li>
+            {% for page in goods.paginator.page_range %}
+            {% if page >= goods.number|add:-2 and page <= goods.number|add:2 %}
+                <li class="{% if goods.number == page %}active{% endif %}">
+                    <a href="?{% change_params page=page %}">{{page}}</a>
+                </li>
+            {% endif %}
+                
+            {% endfor %}
+            <li class="{% if not goods.has_next %}disabled{% endif %}">
+                <a href="{% if goods.has_next %}?{% change_params page=goods.next_page_number %}
+                {% else %}
+                #
+                {% endif %}">Далее</a>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+{% endblock content %}
+

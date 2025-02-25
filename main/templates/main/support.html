@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+{% endblock %}
+
+{% block content %}
+<div class="container " style="padding: 200px 20px; color: rgb(192, 192, 192); ">
+    
+    <div class="row justify-content-center support-menu-block" style="padding: 10px 10px;">
+        <h4>Технический раздел</h4>
+        <div class="row mt-4">
+            <a><img src="{% static "deps/icons/contact.svg" %}" alt="">Контактная информация </a>
+            <p>ИНН - 692201339880 <br>Почта для связи - <span style="color: rgb(247, 185, 93);">support@mkey.top</span> </p>
+            
+        </div>
+        <div class="row mt-4">
+            <a href="{% url "main:support-send" %}"><img src="{% static "deps/icons/send-message.svg" %}" alt="">Отправить запрос</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

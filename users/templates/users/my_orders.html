@@ -1,0 +1,111 @@
+{% extends "profbase.html" %}
+{% load goods_tags %}
+{% load static %}
+
+{% block prof_content %}
+{% tag_Orders user as order %}
+            <!-- Контент на странице -->
+            <div class="row" >
+                <div class="container mt-2 " style="box-shadow: none;">
+                    <div class="row justify-content-center">
+                        <div class=" p-4 mb-4 mx-2 rounded custom-shadow carts-fiel-button" style="box-shadow: none;">
+                            <h3 class="text-center mb-4 text-white">Заказы <span id="goods-in-cart-counts" style="color:rgb(247, 185, 93);">{{order|length}}</span></h3>
+                            <div>
+                                {% if order|length == 0 %}
+                                <div class="row">
+                                    <div class="col text-center carts-img-next">
+                                        <img src="{% static "deps/images/basket2-fill.png" %}" alt="" style="">
+                                    </div>
+                                    <div class="col text-center text-carts-null">
+                                        <h1>Вы еще не сделали заказ?</h1>
+                                        <p>Не беда! У нас море вариантов для любого вкуса и возраста. Продолжайте выбор и наполняйте корзину волнующими приключениями!</p>
+                                        <a href="{% url 'catalog:index' 'all'%}">Перейти в каталог</a>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div id="display-block">
+                                <div class="row">
+                                    <div class="col text-center carts-img-next">
+                                        <img src="{% static "deps/images/basket2-fill.png" %}" alt="" style="">
+                                    </div>
+                                    <div class="col text-center text-carts-null">
+                                        <h1>Вы еще не сделали заказ?</h1>
+                                        <p>Не беда! У нас море вариантов для любого вкуса и возраста. Продолжайте выбор и наполняйте корзину волнующими приключениями!</p>
+                                        <a href="{% url 'catalog:index' 'all'%}">Перейти в каталог</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row d-none d-md-block">
+                                {% for orders in  order%}
+                                    {% tag_OrderStatus user as orderst %}
+                                    <div class="row product_orders mt-2 ">
+                                        <div class="col-md-2 ">
+                                            <a href="{% url "goods:product" orders.product.slug%}"><img src="/media/{{orders.product.image}}" alt=""></a>
+                                        </div>
+                                        <div class="col-md-5">
+                                            <p>{{orders.order}}</p>
+                                            <h6>Название игры: <a style="color: rgb(206, 206, 206);">{{orders.name}}</a></h6>
+                                            <h6>Цена: <a style="color: rgb(247, 185, 93);">{{orders.price}} ₽</a></h6>
+                                            {% for userstatus in  orderst%}
+                                                {% if userstatus == orders.order%}
+                                                    <h6>Статус заказа: <a style="color: rgb(206, 206, 206);">{{userstatus.status}}</a></h6>
+                                                    {% if userstatus.is_paid == True%}
+                                                        <h6>Оплата: <a style="color: rgb(158, 212, 10)" >Оплачено</a></h6>
+                                                    {% else %}
+                                                        <h6>Оплата: <a style="color: rgb(180, 57, 57)">Ожидает оплаты</a></h6>
+                                                    {% endif %}
+                                                    <h6>Дата оформления: <a style="color: rgb(206, 206, 206);">{{userstatus.created_timestamp}}</a></h6>
+                                                    
+                                                {% endif %}
+                                                
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    
+                                {% endfor %}
+                            </div>
+                            <div class="row d-md-none text-center">
+                                {% for orders in  order%}
+                                    {% tag_OrderStatus user as orderst %}
+                                    <div class="row product_orders mt-2 text-center" style="background: none; margin-left: 0; ">
+                                        <a href="{% url "goods:product" orders.product.slug%}" style="margin-left: 0;"><img src="/media/{{orders.product.image}}" alt="" style="margin-left: 0; max-width: 50% !important;"></a>
+                                        <div>
+                                            <p>{{orders.order}}</p>
+                                            
+                                            <h6><a style="color: rgb(206, 206, 206); font-size: 14px;">{{orders.name}}</a></h6>
+                                            <hr>
+                                            <div class="row text-center">
+
+                                            
+                                                {% for userstatus in  orderst%}
+                                                    {% if userstatus == orders.order%}
+                                                        <div class="col text-center mt-2">
+                                                            <h6>Цена: <a style="color: rgb(247, 185, 93);"><br>{{orders.price}} ₽</a></h6>
+                                                        </div>
+                                                        <div class="col text-center mt-2">
+                                                            <h6>Статус заказа: <a style="color: rgb(206, 206, 206);"><br>{{userstatus.status}}</a></h6>
+                                                        </div>
+                                                        <div class=" mt-5">
+                                                            {% if userstatus.is_paid == True%}
+                                                                <h6>Оплата: <a style="color: rgb(158, 212, 10)" >Оплачено</a></h6>
+                                                            {% else %}
+                                                                <h6>Оплата: <a style="color: rgb(180, 57, 57)">Ожидает оплаты</a></h6>
+                                                            {% endif %}
+                                                            <h6>Дата оформления: <a style="color: rgb(206, 206, 206);">{{userstatus.created_timestamp}}</a></h6>
+                                                        </div>
+                                                    {% endif %}
+                                                {% endfor %}
+                                                
+                                            </div>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                    
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+{% endblock  %}

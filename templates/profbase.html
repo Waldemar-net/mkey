@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container display-top-pad" style="box-shadow: none;">
+    {% if user.is_authenticated %}
+    <div class="row ">
+        <div class="d-md-none ">
+            <div class="row text-center d-mb-profile-button" style="background: rgb(44, 44, 44); padding: 8px 0;">
+                <div class="col">
+                    <a href="{% url "users:profile" %}">Профиль</a>
+                </div>
+                <div class="col">
+                    <a href="{% url "users:data" %}">Данные</a>
+                </div>
+                <div class="col">
+                    <a href="{% url "users:my-orders" %}">Покупки</a>
+                </div>
+                <div class="col"> 
+                    <a href="{% url "users:users-cart" %}" >Корзина</a>
+                </div>
+            </div>
+        </div>    
+        <div class="col-md-2 menu-profile mt-5">
+            <div class="d-none d-md-block">
+                <div class="row">
+                    <a href="{% url "users:profile" %}">Профиль</a>
+                </div>
+                <div class="row">
+                    <a href="{% url "users:data" %}">Личные данные</a>
+                </div>
+                <div class="row">
+                    <a href="{% url "users:my-orders" %}">Мои заказы</a>
+                </div>
+                <div class="row"> 
+                    <a href="{% url "users:users-cart" %}">Корзина</a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        <div class="col menu-profile-users ">
+            {% block prof_content %}
+
+            {% endblock prof_content %}
+        </div>
+    
+    
+</div>
+
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+{% endblock %}
+
+{% block content %}
+<div class="container " style="padding: 200px 20px; color: rgb(192, 192, 192); ">
+    <div class="row justify-content-center " style="padding: 10px 10px;">
+    <h4 style="text-align:center;"><a style="color:rgb(253, 253, 253);">Техническая поддержка</a> <a style="color:rgb(247, 185, 93);">MKEY</a></h4>
+        <div class="row justify-content-center mt-4 form-send-support">
+            <form class="col-md-6" action="{% url "main:contact" %}" method="POST">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="inputName" class="form-label">Введите ваше имя</label>
+                    <input type="text" class="form-control" id="inputName" name="name" placeholder="Ваше имя" required>
+                </div>
+    
+                <div class="mb-3">
+                    <label for="inputProblem" class="form-label">Пожалуйста, опишите вашу проблему</label>
+                    <textarea class="form-control" id="inputProblem" rows="3" name="problem" placeholder="Опишите вашу проблему" required></textarea>
+                </div>
+    
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Укажите почту</label>
+                    <input type="email" class="form-control" id="inputEmail" name="email" placeholder="email@example.com" required>
+                </div>
+    
+                <div class="mb-3">
+                    <label for="inputOrderNumber" class="form-label">Введите номер вашего заказа</label>
+                    <input type="text" class="form-control" id="inputOrderNumber" name="order_number" placeholder="Номер заказа" required>
+                </div>
+    
+                <div class="text-center button-support-send">
+                    <button type="submit">Отправить</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

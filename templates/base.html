@@ -1,0 +1,307 @@
+
+{% load goods_tags %}
+{% load carts_tags %}
+{% user_carts request as carts %}
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+    <link rel="stylesheet" href="{% static "deps/css/bootstrap/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/my_css.css" %}">
+    
+    <!-- Стиль footer-a для главной страницы -->
+    {% block css %}
+    {% endblock %}
+    <!-- Favicons for different platforms -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "deps/favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "deps/favicon/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "deps/favicon/favicon-16x16.png" %}">
+    <link rel="icon" href="{% static "deps/favicon/favicon-32x32.ico" %}" type="image/x-icon">
+    <link rel="manifest" href="{% static "deps/favicon/site.webmanifest" %}">
+    <title>{{title}}</title>
+</head>
+
+<body style="background-image: none; background-color: rgb(25, 25, 25);">
+    <header class="w-100 d-none d-md-block" style="position: fixed; z-index:100; background:none; background-color: none;">
+        <nav class="navbar navbar-expand-lg " data-bs-theme="dark" style="background: rgb(13,16,23); ">
+            
+            <div class="container-fluid">
+                <a class="navbar-brand logo-title-name" href="{% url "main:index" %}"><img class="navbar-brand " src="{% static "deps/favicon/mkey.png" %}"></a>
+                
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse " id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item dropdown d-navar-bar-button-left" >
+                            
+                            <a class="  d-navar-bar-button me-2" href="#" role="button"
+                                data-bs-toggle="dropdown"  aria-expanded="false">Каталог игр
+                            </a>
+                            
+                            <ul class="dropdown-menu mt-2 d-catalog" style="width:900px;">
+                                <div class="container d-none d-md-block">
+                                    <div class="row  ">
+                                        <div class="col wlog">
+                                            <ul class="list-group list-group-flush ">
+                                                <h5 class="top-title-menu" id="offcanvasNavbarLabel">Категории</h5>
+                                                {%tag_categories as categories%}
+                                                {% for category in  categories %}
+                                                
+                                                    {% if category.is_displayed == True %}
+                                                        <li class="nav-item list-group-item" >
+                                                            <a class="dropdown-item text-list-menu" href="{% url "catalog:index" category.slug%}">{{category.name}}</a>
+                                                        </li>
+                                                    {% endif %}
+                                                
+                                                {% endfor %}
+											</ul>
+                                            {% comment "" %}
+                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Сервис активации</h5>
+                                            <ul class="list-group list-group-flush">
+                                                {%tag_Services as services%}
+                                                {% for service in  services %}
+                                                <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url "services:index" service.slug%}">{{service.name}}</a></li>
+                                                {% endfor %}
+                                            </ul> 
+                                            {% endcomment %}   
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Жанры</h5>
+                                            <ul class="list-group list-group-flush ">
+                                                {%tag_genre as genre%}
+                                                {% for genry in  genre %}
+                                                <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url 'catalog:index' 'all' %}?order_by=default&genry={{ genry.name|urlencode }}">{{genry.name}}</a></li>
+                                                {% endfor %}
+                                            </ul>
+										</div>    
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Издатели</h5>
+                                            <ul class="list-group list-group-flush ">
+                                                {%tag_publisher as publisher%}
+                                                {% for publishers in  publisher|slice:":5" %}
+                                                
+                                                <li class="nav-item list-group-item "><a class="dropdown-item text-list-menu" href="{% url "publisher:publisher" publishers.slug%}">{{publishers.name}}</a></li>
+                                                
+                                                {% endfor %}
+                                                {% if publisher|length >= 5 %}
+                                                    <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(180, 57, 57);" href="{% url "publishers:publishers" %}">Все издатели - {{publisher|length}}</a>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                        <div class="col">
+                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Разработчики</h5>
+                                            <ul class="list-group list-group-flush">
+                                                {%tag_developer as developer%}
+                                                {% for developer_obj in developer|slice:"0:5" %}
+                                                    <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url "developer:developer" developer_obj.slug%}">{{ developer_obj.name }}</a></li>
+                                                {% endfor %}
+                                                {% if developer|length >= 5 %}
+                                                    <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(180, 57, 57);" href="{% url "developers:developers" %}">Все разработчики - {{developer|length}}</a>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+									
+								</div>
+								<div class="container d-md-none">
+                                    <div class="row">
+                                        <h5 class="top-title-menu" id="offcanvasNavbarLabel">Категории</h5>
+                                        <ul class="list-group list-group-flush ">
+                                        {%tag_categories as categories%}
+                                        {% for category in  categories %}
+                                            {% if category.is_displayed == True %}
+                                                <li class="nav-item list-group-item" >
+                                                    <a class="dropdown-item text-list-menu" href="{% url "catalog:index" category.slug%}">{{category.name}}</a>
+                                                </li>
+                                            {% endif %}
+                                        {% endfor %} 
+                                        </ul>
+									</div>
+                                </div>    
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class='collapse navbar-collapse d-searches'>
+                        <form class="d-flex my-auto d-inline w-100 "  role="search" action="{% url "catalog:search" %}" method="get">
+                            <input class="form-control me-2 d-search w-100"   name="q"  type="search" placeholder="Поиск" aria-label="Search">
+                            <input class="text-white me-2" type="submit" value=""></input>
+                        </form>
+                    </div>
+                    {% if not user.is_authenticated %}
+                    <li class="nav-item d-profile-right-btn mb-1">
+                        <a class="   " href="{% url "users:login" %}">Войти</a>
+                    </li>
+                    {% else %}
+                    
+                        <li class="nav-item dropdown d-none d-md-block d-profile-right-btn image-bar-user ">
+                            {% if user.image %}
+                                <a href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">{{user.username}}<img src="/media/{{user.image}}" alt=""></a>
+                            {% else %}
+                                <a href="#" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">{{user.username}}<img src="{% static "/deps/images/baseavatar.png" %}" alt=""></a>
+                            {% endif %}
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item  text-white" href="{% url "users:profile" %}">Личный кабинет</a>
+                                </li>
+                                {% if  user.is_admin or user.is_staff %}
+                                    <li><a class="dropdown-item  text-white" href="{% url "admin:index" %}">Админ панель</a></li>
+                                    <li><a class="dropdown-item  text-white" href="{% url "main:admin-panel" %}">Служебное помещение</a></li>
+                                {% endif %}
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item  text-white" href="{% url "users:logout" %}">Выйти</a></li>
+                                
+                            </ul>
+                        </li>
+                    {% endif %}
+                           
+                    
+                        <a href="{% url "users:users-cart" %}" class="btn btn-dark btn-secondary me-2 mb-2 d-none d-md-block"  style="background:none; border:none;"
+                                aria-expanded="false" >
+                                <img class="" src="{% static "deps/icons/basket2-fill.svg" %}" alt="Catalog Icon" width="24"
+                                    height="24">
+                                <span id="goods-in-cart-count" style="font-family:'Multiround'; color: rgb(247, 185, 93);">{{carts|length}}</span>
+                        </a>
+                    
+                       
+                    <div class="row d-profile-right-btns d-md-none">   
+                        {% if user.is_authenticated %} 
+                            <a href="{% url "users:profile" %}">Личный кабинет</a>
+                            {% if  user.is_admin or user.is_staff %}
+                                <a href="{% url "admin:index" %}">Админ панель</a>
+                                <a href="{% url "main:admin-panel" %}">Служебное помещение</a>
+                            {% endif %}
+                            <a href="{% url "users:logout" %}">Выйти</a>
+                        {% endif %}   
+                    
+                        <div class="col">
+                            <a href="{% url "users:users-cart" %}" class="btn btn-dark btn-secondary mt-2"  style="background:none; border:none; "
+                                aria-expanded="false" >
+                                <img class="" src="{% static "deps/icons/basket2-fill.svg" %}" alt="Catalog Icon" width="24"
+                                    height="24">
+                                <span id="goods-in-cart-count" style="font-family:'Multiround'; color: rgb(247, 185, 93);">{{carts|length}}</span>
+                            </a>
+                        </div>
+                        <div class="col d-profile-right-btns image-bar-user ">
+                            {% if user.is_authenticated %} 
+                                {% if user.image %}
+                                    <a href="{% url "users:profile" %}"  style="float:right; "
+                                    >{{user.username}}<img src="/media/{{user.image}}" alt=""></a>
+                                {% else %}
+                                    <a href="{% url "users:profile" %}" style="float:right; "
+                                    >{{user.username}}<img src="{% static "/deps/images/baseavatar.png" %}" alt=""></a>
+                                {% endif %}
+                            {% endif %} 
+                        </div>
+                        
+                    </div>    
+                    
+                </div>
+            </div>
+        </nav>
+    </header>
+    <header class="w-100 d-md-none nav-header-block-mb">
+        <div class="container-fluid ">
+            <div class="row">
+                <div class="col nav-button-menu-mb-header">
+                    <a href="{% url "main:menu-mobail" %}"><img class="" src="{% static "deps/icons/category.svg" %}"></a>
+                </div>
+                <div class="col nav-button-menu-mb-header">
+                    <a href="#"><img class="" src="{% static "deps/icons/search-nav.svg" %}"></a>
+                </div>
+                <div class="col text-center logo-mb-header">
+                    <a  href="{% url "main:index" %}"><img class="" src="{% static "deps/favicon/mkey.png" %}"></a>
+                </div>
+                <div class="col nav-button-menu-mb-header">
+                    <a href="{% url "users:users-cart" %}"><img class="" src="{% static "deps/icons/cart-add.svg" %}"></a>
+                </div>
+                <div class="col nav-button-menu-mb-header">
+                    {% if user.is_authenticated %} 
+                        {% if user.image %}
+                            <a href="{% url "users:profile" %}"
+                            ><img src="{{user.image.url}}" alt=""></a>
+                        {% else %}
+                            <a href="{% url "users:profile" %}"
+                            ><img src="{% static "/deps/images/baseavatar.png" %}" alt=""></a>
+                        {% endif %}
+                    {% else %}
+                        <a href="{% url "users:profile" %}"
+                        ><img src="{% static "/deps/images/baseavatar.png" %}" alt=""></a>
+                    {% endif %} 
+                </div>
+            </div>
+            
+            
+            
+        </div>
+    </header>
+    
+    <section>
+        <div class="container-fluid">
+            <!-- Каталог и корзина с фиксированным расположением на странице -->
+            <div class="mt-1 position-fixed z-3">
+                <!-- Каталог -->
+                
+                <!-- Значек корзины, вызывает модальное окно -->
+                 
+                <!-- Разметка модального окна корзины -->
+                <div class="modal fade " id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-scroll-style  ">
+                        <div class="modal-content background-carts" style="border:none; border-radius: 0; border-bottom: 0;">
+                            <div class="background-carts">
+                                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+                <!-- Закончилась разметка модального окна -->
+            </div>
+        </div>
+        <!-- Контент -->
+        
+            
+                
+            {% block contents %}
+            {% endblock %}
+                
+         
+    
+        <div class="container-fluid"> 
+            
+                <div  style="overflow: hidden; margin-left: 0; left:0;">
+                    <!-- Контент на странице -->
+                    {% include "includes/notifications.html" %}
+                    {% block content %}{% endblock %}
+                </div>
+            
+        </div>
+    </section>
+    {% block footer %}{% endblock %}
+    <script src="{% static "deps/js/jquery/jquery-3.7.0.min.js" %}"></script>
+    
+    <script src="{% static "deps/js/jquery-ajax.js" %}"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="{% static "deps/js/script.js" %}"></script>
+    <script src="{% static "deps/js/bootstrap/bootstrap.bundle.min.js" %}"></script>
+
+    
+    
+</body>
+
+</html>

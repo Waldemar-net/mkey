@@ -1,0 +1,747 @@
+{% extends "base.html" %}
+{% load static %}
+{% load goods_tags %}
+
+{% block content %}
+
+
+<div class="container display-top-pad">
+    <div class="row navigation-panel-product ">
+        <div class="col d-none d-md-block">
+            <hr style="color: white;">
+        </div>
+        <div class="col-auto mr-auto text-center d-none d-md-block">
+            <a href="{% url "main:index" %}">Главная</a>
+        </div>
+        <div class="col-md-1 ml-md-auto mr-auto d-none d-md-block">
+            <hr style="color: white;">
+        </div>
+        <div class="col-auto mr-auto text-center d-none d-md-block">
+            <a href="{% url "catalog:index" 'all'%}">Каталог</a>
+        </div>
+        <div class="col-md-1 ml-md-auto d-none d-md-block">
+            <hr style="color: white;">
+        </div>
+        <div class="col-auto mr-auto text-center d-none d-md-block">
+            <a href="#">{{product.name}}</a>
+        </div>
+        <div class="col d-none d-md-block">
+            <hr style="color: white;">
+        </div>
+    </div>
+</div>
+<div class="container mt-5 d-none d-md-block" >
+    <div class="row" >
+        <div class="col-md-4 d-about-razrab-text d-about-razrab-href text-white" >
+            <div class="image-product-class ">
+                <img src="{{product.image.url}}">
+            </div>
+            <div class="row text-white text-left mt-4" >
+                <div class="col-md-3 ">
+                    <p>Жанр</p>
+                </div>
+                <div class="col">
+                    {% for genry in product.genry.all %}
+                        <a href="{% url 'catalog:index' 'all' %}?order_by=default&genry={{ genry.name|urlencode }}">{{genry}}</a>
+                        {% if not forloop.last %},
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row text-white">
+                <div class="col-md-3 ">
+                    <p>Платформа</p>
+                </div>
+                <div class="col">
+                    <p>{{product.platform}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <p>Дата выхода</p>
+                </div>
+                <div class="col">
+                    <p>{{product.datas}}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <p>Издатель</p>
+                </div>
+                <div class="col">
+                    {% for publisherip in product.publisher.all%}
+                        <a href="{% url "publisher:publisher" publisherip.slug%}">{{publisherip}}</a>
+                        {% if not forloop.last %}
+                        ,
+                        {% endif %}
+                    {% endfor %}
+                    
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <p>Разработчик</p>
+                </div>
+                <div class="col">
+                    
+                    {% for developerip in product.developer.all %}
+                        <a href="{% url "developer:developer" developerip.slug%}">{{ developerip }}</a>
+                    {% if not forloop.last %},
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col" >
+            {%tag_Key product as keys%}
+            {% tag_GetCart product as carts_game %}
+            <div class="row text-white">
+                    <div class="col">
+                        <p class="title-product-name-game">КУПИТЬ {{product.name}}</p>
+                        <div class="d-nal-text">
+                        {% if keys %}
+                            <li style="color: rgb(192,192,192);">Есть в наличии</li>
+                        
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4 text-white">
+                <div class="col-md-3 ">
+                    {% if keys %}
+                        {% if carts_game %}
+                            <a href="{% url "cart:cart_add"%}" data-product-id="{{product.id}}" class="{% if keys %}box-add-cart-product{% endif %} add-to-cart">{% csrf_token %}В Корзину</a>
+                        {% else %}
+                            <a class="box-not-key-product">Добавлено</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="box-not-key-product">Нет в наличии</a>
+                    {% endif %}
+                </div>
+                <div class="col price-product-module">
+                    {% if  product.discount%}
+                        <p style="color: rgb(247, 185, 93);">{{product.sale_price}} ₽ <s style="color: rgb(192,198,198);">{{product.price}} ₽</s><span>-{{product.discount}} % </span></p>
+                        
+                    {% else %}
+                        <p><strong>{{product.price}} ₽</strong></p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col mt-2">
+                    <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Поддержка языков</p>
+                    <p style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.languages}}</p>
+                </div>
+                <div class="col  mt-2">
+                    <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Регион активации </p>
+                    <p style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.region}}</p>
+                </div>
+                <div class="col mt-2">
+                    <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Сервис активации </p>
+                    <p style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.services}}</p>
+                </div>
+            </div>
+            <div class="mt-5">
+                <div class="tab">
+                {% if product.description %}
+                    <input checked id="tab-btn-1" name="tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#tab-content-description" role="tab" aria-controls="tab-content-description" aria-selected="true">   
+                    <label for="tab-btn-1">Об игре</label>
+                {% endif %}
+                
+                {% if product.system %}
+                    {% if not product.description %}
+                        <input checked id="tab-btn-2" name="tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#tab-content-characteristics" role="tab" aria-controls="tab-content-characteristics" aria-selected="false">
+                        <label for="tab-btn-2">Характеристики</label>
+                    {% else %}
+                        <input id="tab-btn-2" name="tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#tab-content-characteristics" role="tab" aria-controls="tab-content-characteristics" aria-selected="false">
+                        <label for="tab-btn-2">Характеристики</label>
+                    {% endif %}
+                {% endif %}
+                
+                <input id="tab-btn-3" name="tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#tab-content-activation" role="tab" aria-controls="tab-content-activation" aria-selected="false">
+                <label for="tab-btn-3">Активация</label>
+                
+                {% if product.description %}
+                    <div class="tab-content show active" id="tab-description" role="tabpanel" aria-labelledby="tab-btn-1" style="text-align: left;">
+                        <p style="font-family: 'Multiround'; font-size: 13px;">{{ product.description }}</p>
+                    </div>
+                {% endif %}
+                
+                <div class="tab-content" id="tab-characteristics" role="tabpanel" aria-labelledby="tab-btn-2" style="text-align: left;">
+                    <p>Минимальные системные требования</p>
+                    <ul>
+                        {% if product.system %}
+                            <li class="card-text">ОС - {{ product.system }}</li>
+                        {% endif %}
+                        {% if product.processor %}
+                            <li class="card-text">Процессор - {{ product.processor }}</li>
+                        {% endif %}
+                        {% if product.rampc %}
+                            <li class="card-text">Оперативная память - {{ product.rampc }}</li>
+                        {% endif %}
+                        {% if product.videocard %}
+                            <li class="card-text">Видеокарта - {{ product.videocard }}</li>
+                        {% endif %}
+                        {% if product.direx %}
+                            <li class="card-text">DirectX - {{ product.direx }}</li>
+                        {% endif %}
+                        {% if product.disk %}
+                            <li class="card-text">Место на диске - {{ product.disk }}</li>
+                        {% endif %}
+                        {% if product.additional %}
+                            <li class="card-text">Дополнительная информация - {{ product.additional }}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="tab-content" id="tab-activation" role="tabpanel" aria-labelledby="tab-btn-3" style="text-align: left;">
+                    <ul>
+                        <li class="card-text">Скопируйте ключ приобретённой игры из раздела «Заказы» в личном кабинете</li>
+                        <li class="card-text">Если у вас не установлен клиент Steam, <a href="http://store.steampowered.com/about/">скачайте и установите его.</a></li>
+                        <li class="card-text">Войдите в свой аккаунт Steam или зарегистрируйте новый, если у вас его нет.</li>
+                        <li class="card-text">Перейдите в раздел «Игры» и выберите «Активировать через Steam...». </li>
+                        <li class="card-text">Введите ключ активации.</li>
+                        <li class="card-text">После этого игра будет в вашей библиотеке Steam, и вы сможете её скачать.</li>
+                    </ul>
+                    
+                </div>
+            </div>
+            {% comment "" %}
+            {% if  product.video %}
+            <div class="row mt-3">
+                    <div class="col ">
+                    <iframe src="https://rutube.ru/play/embed/{{product.video}}" class="about-video" title="{{product.name}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>          
+                    </div>
+                </div>
+            {% endif %}
+            {% endcomment %}
+            <div class="row text-white text-image-carusel mt-5"> 
+                <h3>Изображения</h3>      
+                <div class="carusel-imgage row"> 
+                    {% for images in product.images.all %}
+                        <div class="col-4"> 
+                            <img src="{{ images.image.url }}" class="carusel-imgages img gallery-image" alt="..." data-bs-toggle="modal" data-bs-target="#imageModal1">
+                        </div>
+                    {% endfor %}
+                </div>    
+            </div>
+            
+        </div>
+        <div class="modal fade" id="imageModal1" tabindex="-1"
+                aria-labelledby="imageModal1Label" aria-hidden="true">
+                <div class="modal-dialog modal-lg" class="modal-image-cs">
+                    <div class="modal-content modal-mobail-cs" >
+                        <div class=" " style="float:right;">
+                            
+                            <button type="button" class="btn-close btn-close-white"  data-bs-dismiss="modal"
+                                aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <img id="modalImage" class="modal-image-cs" src=""
+                                class="img-fluid">
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            
+        </div>
+        
+    </div>
+</div>
+
+<!--Мобильный режим-->
+<div class="container-fluid d-md-none mt-4" >
+    <div class="row" >
+        <div class="col d-about-razrab-text d-about-razrab-href text-white text-center" >
+            <div class="image-product-class " >
+                <img src="{{product.image.url}}" >
+            </div>
+            {%tag_Key product as keys%}
+            {% tag_GetCart product as carts_game %}
+            <div class="row text-white text-center mt-2">
+                <p class="title-product-name-game">КУПИТЬ {{product.name}}</p>
+            </div>
+            <div class="row d-nal-text text-center">
+                {% if keys %}
+                    <li style="color: rgb(192,192,192);">Есть в наличии</li>
+                {% else %}
+                    <li style="color: rgb(192,192,192);">Нет в наличии</li>
+                {% endif %}
+            </div>
+            <hr>
+            <div class="row mt-4 text-white text-center align-items-center">
+                <div class="col price-product-module text-center ">
+                    {% if  product.discount%}
+                        <p class="text-center" style="color: rgb(247, 185, 93);">{{product.sale_price}} ₽ </p>
+                        <p class="text-center"><s style="color: rgb(192,198,198);">{{product.price}} ₽</s><span>-{{product.discount}} % </span></p>
+                    {% else %}
+                        <p class="mt-3"><strong>{{product.price}} ₽</strong></p>
+                    {% endif %}
+                </div>
+                <div class="col text-center">
+                    {% if keys %}
+                        {% if carts_game %}
+                            <a href="{% url "cart:cart_add"%}" data-product-id="{{product.id}}" class="{% if keys %}box-add-cart-product{% endif %} add-to-cart">{% csrf_token %}В Корзину</a>
+                        {% else %}
+                            <a class="box-not-key-product">Добавлено</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="box-not-key-product">Нет в наличии</a>
+                    {% endif %}
+                </div>
+                
+            </div>
+            <hr>
+
+            <div class="row mt-2">
+                <div class="col">
+                    <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Поддержка языков</p>
+                    
+                </div>
+                <div class="col">
+                    <p style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.languages}}</p>
+                </div>
+                
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Регион активации </p>
+                </div>
+                <div class="col">
+                    <p style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.region}}</p>
+                </div>
+            </div>
+            <div class="row mt-2">
+                <div class="col">
+                    <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Сервис активации </p>
+                </div>
+                <div class="col">
+                    <p style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.services}}</p>
+                </div>
+            </div>
+            <!---->
+            
+            
+
+            <div class="tab mt-4" >
+                {% if product.description %}
+                    <input checked id="mobile-custom-tab-btn-1" name="mobile-tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#mobile-tab-content-description" role="tab" aria-controls="mobile-tab-content-description" aria-selected="true">   
+                    <label for="mobile-custom-tab-btn-1">Об игре</label>
+                {% endif %}
+                
+                {% if product.system %}
+                    {% if not product.description %}
+                        <input checked id="mobile-custom-tab-btn-2" name="mobile-tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#mobile-tab-content-characteristics" role="tab" aria-controls="mobile-tab-content-characteristics" aria-selected="false">
+                        <label for="mobile-custom-tab-btn-2">Характеристики</label>
+                    {% else %}
+                        <input id="mobile-custom-tab-btn-2" name="mobile-tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#mobile-tab-content-characteristics" role="tab" aria-controls="mobile-tab-content-characteristics" aria-selected="false">
+                        <label for="mobile-custom-tab-btn-2">Характеристики</label>
+                    {% endif %}
+                {% endif %}
+                
+                <input id="mobile-custom-tab-btn-3" name="mobile-tab-btn" type="radio" data-bs-toggle="tab" data-bs-target="#mobile-tab-content-activation" role="tab" aria-controls="mobile-tab-content-activation" aria-selected="false">
+                <label for="mobile-custom-tab-btn-3">Активация</label>
+                
+                {% if product.description %}
+                    <div class="tab-content show active" id="mobile-tab-content-description" role="tabpanel" aria-labelledby="mobile-custom-tab-btn-1" style="text-align: left;">
+                        <p style="font-family: 'Multiround'; font-size: 10px;">{{ product.description }}</p>
+                    </div>
+                {% endif %}
+                
+                <div class="tab-content" id="mobile-tab-content-characteristics" role="tabpanel" aria-labelledby="mobile-custom-tab-btn-2" style="text-align: left;">
+                    <p>Минимальные системные требования</p>
+                    <ul>
+                        {% if product.system %}
+                            <li class="card-text">ОС - {{ product.system }}</li>
+                        {% endif %}
+                        {% if product.processor %}
+                            <li class="card-text">Процессор - {{ product.processor }}</li>
+                        {% endif %}
+                        {% if product.rampc %}
+                            <li class="card-text">Оперативная память - {{ product.rampc }}</li>
+                        {% endif %}
+                        {% if product.videocard %}
+                            <li class="card-text">Видеокарта - {{ product.videocard }}</li>
+                        {% endif %}
+                        {% if product.direx %}
+                            <li class="card-text">DirectX - {{ product.direx }}</li>
+                        {% endif %}
+                        {% if product.disk %}
+                            <li class="card-text">Место на диске - {{ product.disk }}</li>
+                        {% endif %}
+                        {% if product.additional %}
+                            <li class="card-text">Дополнительная информация - {{ product.additional }}</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                
+                <div class="tab-content" id="mobile-tab-content-activation" role="tabpanel" aria-labelledby="mobile-custom-tab-btn-3" style="text-align: left;">
+                    <ul>
+                        <li class="card-text">Скопируйте ключ приобретённой игры из раздела «Заказы» в личном кабинете</li>
+                        <li class="card-text">Если у вас не установлен клиент Steam, <a href="http://store.steampowered.com/about/">скачайте и установите его.</a></li>
+                        <li class="card-text">Войдите в свой аккаунт Steam или зарегистрируйте новый, если у вас его нет.</li>
+                        <li class="card-text">Перейдите в раздел «Игры» и выберите «Активировать через Steam...». </li>
+                        <li class="card-text">Введите ключ активации.</li>
+                        <li class="card-text">После этого игра будет в вашей библиотеке Steam, и вы сможете её скачать.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="row text-white text-image-carusel mt-5"> 
+            <h3 style="float:left; text-align:left;">Изображения</h3>      
+            <div class="carusel-imgage row"> 
+                {% for images in product.images.all %}
+                    <div class="col-4"> 
+                        <img src="{{ images.image.url }}" class="carusel-imgages img gallery-image" alt="..." data-bs-toggle="modal" data-bs-target="#imageModal2">
+                    </div>
+                {% endfor %}
+            </div>    
+        </div>
+        
+        
+    </div>
+    {% comment "" %}
+    {% if  product.video %}
+    <div class="row mt-3">
+            <div class="col ">
+            <iframe src="https://rutube.ru/play/embed/{{product.video}}" class="about-video" title="{{product.name}}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>          
+            </div>
+        </div>
+    {% endif %}
+    {% endcomment %}
+</div>  
+
+<div class="container mt-5 ">
+    <div class="row comments-elements">
+            <form action="{% url "comments:add_comment" product_id=product.id %}" method="post">
+                {% csrf_token %}
+                <label for="comment" class="ms-2">Оставить комментарий:</label><br>
+                <div class="input-group mt-3">
+                    {% if not user.is_authenticated %}
+                        <p>Необходимо авторизоваться, чтобы оставить комментарий! <a href="{% url "users:login" %}">Войти</a></p>
+                    {% else %}
+                        <input class="form-control comments-input-send" name="comments" type="text" placeholder="Написать" aria-label="comments">
+                        <div class="input-group-append">
+                            <button class="ms-1 btn-send-comments" type="submit">Отправить</button>
+                        </div>
+                    {% endif %}
+                    
+                </div>
+            </form>
+        </div>
+        <div class="comments-block mt-2">
+            {% tag_Comments product as comments %}
+            
+            {% if comments %}
+                {% for comment in comments %}
+                    <div class="text-white mt-5">
+                        <h5>{{ comment.created_timestamp }}</h5>
+                        {% if comment.user.is_admin or comment.user.is_staff %}
+                            <h4>{{ comment.user.last_name }} {{ comment.user.first_name }} 
+                                <img src="{{ comment.user.image.url }}" alt=""> 
+                                <a style="font-size: 10px; color: rgb(175, 175, 175);">Техническая поддержка</a>
+                            </h4>
+                        {% else %}
+                            <h4>{{ comment.user.last_name }} {{ comment.user.first_name }} 
+                                <img src="{{ comment.user.image.url }}" alt="">
+                            </h4>
+                        {% endif %}
+                        <p class="ms-3 mt-3">{{ comment.comments }}</p>
+                        <hr>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-white text-center block-none-comment">
+                    <h5>Оставь первый комментарий</h5>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% comment "" %}
+    <div class="card mb-3 mt-5  text-white d-block-about-product" style="background:none; border:none; margin-left: 0; padding: 0;">
+        <div class="row">
+            <!-- Миниатюры -->
+            <div class="col-md-4 text-center">
+                <img src="{{product.image.url}}"
+                    class="img-thumbnail d-image-product-about">
+                <div class="d-none d-md-block">
+                    <div class="text-center d-about-razrab-text d-about-razrab-href mt-5 d-none d-md-block">
+                        <div class="row">
+                            <div class="col">
+                                <p class="">Жанр</p>
+                            </div>
+                            <div class="col">
+                                {% for genry in product.genry.all %}
+                                    
+                                        <a href="/catalog/all/?order_by=default&genry={{genry.name}}">{{genry}}</a>
+                                    {% if not forloop.last %}
+                                    ,
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Платформа</p>
+                            </div>
+                            <div class="col">
+                                <p>{{product.platform}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Дата выхода</p>
+                            </div>
+                            <div class="col">
+                                <p>{{product.datas}}</p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Издатель</p>
+                            </div>
+                            <div class="col">
+                                {% for publisherip in product.publisher.all%}
+                                    <a href="{% url "publisher:publisher" publisherip.slug%}">{{publisherip}}</a>
+                                    {% if not forloop.last %}
+                                    ,
+                                    {% endif %}
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <p>Разработчик</p>
+                            </div>
+                            <div class="col">
+                                
+                                {% for developerip in product.developer.all %}
+                                    <a href="{% url "developer:developer" developerip.slug%}">{{ developerip }}</a>
+                                {% if not forloop.last %},
+                                {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col">
+                {%tag_Key product as keys%}
+                <div class="d-none d-md-block">
+                    <div class="row ms-2 me-2 mt-5">
+                        <div class="col">
+                            <p class="card-title title-product-name-game">КУПИТЬ {{product.name}}</p>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col d-nal-text">
+                                {% if keys %}
+                                    <li style="color: rgb(192,192,192);">Есть в наличии</li>
+                                {% else %}
+                                    <li style="color: rgb(192,192,192);">Нет в наличии</li>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-md-none text-center mt-3">
+                    <p class="card-title title-product-name-game">КУПИТЬ {{product.name}}</p>
+                    <div class="row mt-3">
+                        <div class="col d-nal-text">
+                            {% if keys %}
+                                <li style="color: rgb(192,192,192);">Есть в наличии</li>
+                            {% else %}
+                                <li style="color: rgb(192,192,192);">Нет в наличии</li>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <hr style="width: 90%; margin: auto;" class="mt-4">
+                </div>
+                <div class="d-none d-md-block ">
+                    <div class="row mt-4 ms-2 me-2 nopadding ">
+                    
+                        <div class="col ">
+                            {% if keys %}
+                                <a href="{% url "cart:cart_add"%}" data-product-id="{{product.id}}" class="btn btn-dark button-buy-game-product font-text-product add-to-cart">{% csrf_token %}В Корзину</a>
+                            {% else %}
+                                <a class="btn btn-dark button-buy-game-product font-text-product" style="background: rgb(46,46,46);">В Корзину</a>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-10 card-text cards-text title-product-name-game ">
+                            {% if  product.discount%}
+                                <p style="left:0; color: rgb(247, 185, 93);">{{product.sale_price}} ₽ <s style="color: rgb(192,198,198);">{{product.price}} ₽</s></p>
+                                <span class="d-disc-product text-dark">- {{product.discount}} %</span>
+                            {% else %}
+                                <p><strong>{{product.price}} ₽</strong></p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="d-md-none">
+                    <div class="row mt-4 ms-2 me-2 nopadding ">
+                        <div class="row mt-4 text-white text-center align-items-center">
+                            <div class="col price-product-module text-center ">
+                                {% if  product.discount%}
+                                    <p class="text-center" style="color: rgb(247, 185, 93);">{{product.sale_price}} ₽ </p>
+                                    <p class="text-center"><s style="color: rgb(192,198,198);">{{product.price}} ₽</s><span>-{{product.discount}} % </span></p>
+                                {% else %}
+                                    <p class="mt-3"><strong>{{product.price}} ₽</strong></p>
+                                {% endif %}
+                            </div>
+                            <div class="col text-center">
+                                {% if keys %}
+                                    {% if carts_game %}
+                                        <a href="{% url "cart:cart_add"%}" data-product-id="{{product.id}}" class="{% if keys %}box-add-cart-product{% endif %} add-to-cart">{% csrf_token %}В Корзину</a>
+                                    {% else %}
+                                        <a class="box-not-key-product">Добавлено</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a class="box-not-key-product">Нет в наличии</a>
+                                {% endif %}
+                            </div>
+                            
+                        </div>
+                        <hr style="width: 90%; margin: auto;" class="mt-2">
+                    
+                </div>
+                <div class="d-none d-md-block">
+                    <div class="row mt-3 ms-3">
+                        <div class="col mt-2">
+                            <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Поддержка языков</p>
+                            <p style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.languages}}</p>
+                        </div>
+                        <div class="col  mt-2">
+                            <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Регион активации </p>
+                            <p style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.region}}</p>
+                        </div>
+                        <div class="col mt-2">
+                            <p style="font-size: 12px; font-family:'Multiround'; color: rgb(235, 235, 235);">Сервис активации </p>
+                            <p style="font-size: 12px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.services}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-md-none text-center ms-3">
+                    <div class="row mt-3 ">
+                        <div class="row ">
+                            <div class="col ">
+                                <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Поддержка языков</p>
+                            </div>
+                            <div class="col">
+                                <p style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.languages}}</p>
+                            </div>
+                             
+                        </div>
+                        <div class="row me-2 mt-2">
+                            <div class="col">
+                                <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Регион активации </p>
+                            </div>
+                            <div class="col">
+                                <p style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.region}}</p>
+                            </div>
+                        </div>
+                        <div class="row me-2 mt-2">
+                            <div class="col">
+                                <p style="font-size: 10px; font-family:'Multiround'; color: rgb(235, 235, 235);">Сервис активации </p>
+                            </div>
+                            <div class="col">
+                                <p style="font-size: 10px; font-family:'Multiround'; color: rgb(247, 185, 93);">{{product.services}}</p>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+               
+                    <!-- Описание товара -->
+                    <div class="containers">
+                        <div class="tab">
+                        {% if product.description %}
+                            <input checked id="tab-btn-1" name="tab-btn" type="radio" value="">
+                            <label for="tab-btn-1" >Об игре</label>
+                        {% endif %}
+                        {% if product.system %}
+                            {% if not product.description %}
+                                <input checked id="tab-btn-2" name="tab-btn" type="radio" value="">
+                                <label for="tab-btn-2" >Характеристики</label>
+                            {% else %}
+                                <input id="tab-btn-2" name="tab-btn" type="radio" value="">
+                                <label for="tab-btn-2" >Характеристики</label>
+                            {% endif %}
+                            
+                        {% endif %}
+                        <input id="tab-btn-3" name="tab-btn" type="radio" value="">
+                        <label for="tab-btn-3" >Активация</label>
+                        {% if product.description %}
+                            <div class="tab-content" id="content-1">
+                                <p class="card-text">{{product.description}}</p>
+                            </div>
+                        {% endif %}
+                        
+                        <div class="tab-content" id="content-2">
+                            <p>Минимальные системные требования</p>
+                                {% if product.system %}
+                                    <li class="card-text">ОС - {{product.system}}</li>
+                                {% endif %}
+                                {% if product.processor %}
+                                    <li class="card-text">Процессор - {{product.processor}}</li>
+                                {% endif %}
+                                {% if product.rampc %}
+                                    <li class="card-text">Оперативная память - {{product.rampc}}</li>
+                                {% endif %}
+                                {% if product.videocard %}
+                                    <li class="card-text">Видеокарта - {{product.videocard}}</li>
+                                {% endif %}
+                                {% if product.direx %}
+                                    <li class="card-text">DirectX - {{product.direx}}</li>
+                                {% endif %}
+                                {% if product.disk %}
+                                    <li class="card-text">Место на диске - {{product.disk}}</li>
+                                {% endif %}
+                                {% if product.additional %}
+                                    <li class="card-text">Дополнительная информация - {{product.additional}}</li>
+                                {% endif %}
+                            
+                                
+                        </div>
+                        <div class="tab-content" id="content-3">
+                            <li class="card-text">Скопируйте ключ приобретённой игры из раздела «Заказы» в личном кабинете</li>
+                            <li class="card-text">Если у вас не установлен клиент Steam, <a href="http://store.steampowered.com/about/">скачайте и установите его.</a></li>
+                            <li class="card-text">Войдите в свой аккаунт Steam или зарегистрируйте новый, если у вас его нет.</li>
+                            <li class="card-text">Перейдите в раздел «Игры» и выберите «Активировать через Steam...».</li>
+                            <li class="card-text">Введите ключ активации.</li>
+                            <li class="card-text">После этого игра будет в вашей библиотеке Steam, и вы сможете её скачать.</li>
+                        </div>
+                        </div>
+                    </div>
+                 
+                  
+                  
+                </div>
+            </div>  
+        </div>      
+        
+    
+        
+                
+            <!-- Увеличить изображение в модальном окне -->
+        
+          
+        
+        
+        
+        
+    </div>
+</div>
+
+
+
+   {% endcomment %}
+
+
+{% endblock content %}

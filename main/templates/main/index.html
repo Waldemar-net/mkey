@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+{% load goods_tags %}
+
+{% block css %}
+    <link rel="stylesheet" href="{% static "deps/css/my_footer_css.css" %}">
+{% endblock %}
+
+{% block contents %}
+
+    
+{%tag_products as product%}
+{%tag_products_like as product_like%}
+{%tag_products_sale as product_sale%}
+{%tag_products_podbor as product_podbor%}
+
+<div class=" container-fluid" style="padding: 2% 0; background: rgb(18,18,18);">
+    <div class="display-top-pad">
+        <div class="slider single-item"> 
+            {% for game in product %}
+                {%tag_Key game as keys%}
+                {%tag_GetCart game as carts_game%}
+                    {% if game.is_displayed == True %}
+                        <div class="col" style="margin-left: 5px;"> 
+                            <a href="{% url "goods:product" game.slug%}">
+                                <div class="img-container" >
+                                    <img src="{{game.poster.url}}" class="img w-100" alt="...">
+                                    
+                                    
+                                </div>
+                            </a>
+                            <div class="d_title_poster">
+                                <div class="d_title_absolute_poster">
+                                    <div class="d_price_poster">
+                                        {% if game.discount%}
+                                        <div class="d_discount_price_s">
+                                            <h4>{{game.name}}</h4>
+                                            <h6><s>{{game.price}}  ₽</s> <strong>{{game.sale_price}} ₽</strong><span style="color: rgb(247, 185, 93); padding: 5px 5px; font-size: 10px;">-{{game.discount}} % </span>
+                                                
+                                                {% if not keys %}
+                                                    <a style="color: rgb(247, 185, 93);">Нет в наличии</a>
+                                                {% else %}
+                                                    {% if carts_game %}
+                                                        <a href="{% url "cart:cart_add" %}" class="add-to-cart" data-product-id="{{ game.id }}">
+                                                            {% csrf_token %}
+                                                            <span id="cart-text">В корзину</span>
+                                                        </a>
+                                                    {% else %}
+                                                        <a style="color: rgb(247, 185, 93);">Добавлено</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                                </h6>
+                                        </div>
+                                            
+                                        {% else %}
+                                        <div class="d_discount_price_s">
+                                            <h4>{{game.name}}</h4>
+                                            <h6>{{game.price}} ₽
+                                                {% if not keys %}
+                                                    <a style="color: rgb(247, 185, 93);">Нет в наличии</a>
+                                                {% else %}
+                                                    {% if carts_game %}
+                                                        <a href="{% url "cart:cart_add" %}" class="add-to-cart" data-product-id="{{ game.id }}">
+                                                            {% csrf_token %}
+                                                            <span id="cart-text">В корзину</span>
+                                                        </a>
+                                                    {% else %}
+                                                        <a>Добавлено</a>
+                                                    {% endif %}
+                                                {% endif %}
+                                                    </h6> 
+                                        </div>
+                                           
+                                        {% endif %}
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            
+                        </div>
+                    {% endif %}
+                 
+            {% endfor %}
+            
+        </div>      
+        
+    </div>
+    
+</div>
+
+
+{% for category in categories %}
+    {% if category.is_displayed and category.slug != 'all' %}
+    <div class="mt-1">
+        <h5 class="block-gaming">{{ category.name }} 
+            <a href="{% url 'goods:index' category.slug %}" style="margin-left: 5px; text-decoration:none; color: rgba(247, 185, 93, 0.7); font-size: 9px;">Смотреть все ></a>
+        </h5>
+    </div>
+    {% endif %}
+
+
+<div class="container-fluid text-white news-game-slider" style="border-radius: 5px;"> 
+    <div class="container">
+        <div class="row">
+            <div class="col text-white">
+                <div class="slider singles-item">
+                    {% for game in products_by_category|get_item:category %}
+                        {% tag_Key game as keys %}
+                        {% tag_GetCart game as carts_game %}
+                        {% if game.is_displayed %}
+                            <div class="col d_product_pool" style="margin-left: 5px;">
+                                <div class="d_image_product" style="padding:0;">
+                                    <a href="{% url 'goods:product' game.slug %}">
+                                        <img src="{{ game.image.url }}" class="img-fluid gallery-image" style="padding: 0px 5px;" alt="...">
+                                    </a>
+                                </div>
+                                <div class="d_slider_product">
+                                    <div class="d_slider_absolute_product">
+                                        <div class="d_price_product">
+                                            {% if game.discount %}
+                                            <div class="d_discount_product">
+                                                <h4>{{ game.name }}</h4>
+                                                <h6>
+                                                    <s>{{ game.price }} ₽</s> 
+                                                    <strong>{{ game.sale_price }} ₽</strong>
+                                                    <span style="color: rgb(247, 185, 93); padding: 5px 5px;">-{{ game.discount }} %</span>
+                                                    {% if not keys %}
+                                                    <div class="d_img_product_no_cart">
+                                                        <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                    </div>
+                                                    {% else %}
+                                                        {% if carts_game %}
+                                                        <div class="d_img_product_cart">
+                                                            <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ game.id }}">
+                                                                {% csrf_token %}
+                                                                <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                            </a>
+                                                        </div>
+                                                        {% else %}
+                                                        <div class="d_img_product_cart_select">
+                                                            <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                        </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </h6>
+                                            </div>
+                                            {% else %}
+                                            <div class="d_discount_product">
+                                                <h4>{{ game.name }}</h4>
+                                                <h6>{{ game.price }} ₽
+                                                    {% if not keys %}
+                                                    <div class="d_img_product_no_cart">
+                                                        <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ game.id }}">
+                                                            {% csrf_token %}
+                                                            <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                        </a>
+                                                    </div>
+                                                    {% else %}
+                                                        {% if carts_game %}
+                                                        <div class="d_img_product_cart">
+                                                            <a href="{% url 'cart:cart_add' %}" class="add-to-cart" data-product-id="{{ game.id }}">
+                                                                {% csrf_token %}
+                                                                <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                            </a>
+                                                        </div>
+                                                        {% else %}
+                                                        <div class="d_img_product_cart_select">
+                                                            <img src="{% static 'deps/icons/cart-add.svg' %}" alt="">
+                                                        </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                </h6> 
+                                            </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+{% endblock %}
+{% block footer %}
+<footer class="py-1 footer-bottom d-none d-md-block" style="background: rgb(13,16,23);">
+    <div class="container text-white text-center">
+        <div class="row">
+            <div class="col">
+                <a href="{% url "main:agreement" %}" class="footer-text">Соглашение</a>
+            </div>
+            <div class="col">
+                <a href="{% url "main:support" %}" class="footer-text">Поддержка</a>
+            </div>
+            <div class="col">
+                <a href="{% url "main:privacy" %}" class="footer-text">Конфиденциальность</a>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="text-center">
+                <p class=" footer-text">&copy; MKEY 2024</p>
+            </div>
+        </div>
+        
+    </div>
+</footer>
+{% endblock %}
+
