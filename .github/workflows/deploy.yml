@@ -10,8 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Add server to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H 77.51.222.62 >> ~/.ssh/known_hosts  # Замените на ваш IP-адрес
 
       - name: Restart service
         run: |
-          ssh mkey@77.51.222.62 'sudo systemctl restart mkey'
+          echo "${{ secrets.SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+          ssh -i key.pem mkey@77.51.222.62 'sudo systemctl restart mkey'
