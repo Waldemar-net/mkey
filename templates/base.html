@@ -26,22 +26,8 @@
     <title>{{title}}</title>
 </head>
 
-<body style="background-image: none;">
-    <header class="header d-flex align-items-center d-none d-md-block">
-        <img src="{% static "deps/favicon/mkey.png" %}" alt="mkey" class="site-icon" style="width: 24px; height: 24px;">
-        <button class="btn btn-transparent">Каталог игр</button>
+<body style="background-image: none; background-color: rgb(25, 25, 25);">
     
-        <div class="flex-grow-1 mx-3">
-            <input type="text" class="form-control" placeholder="Поиск..." aria-label="Поиск">
-        </div>
-    
-        <div class="d-flex align-items-center">
-            <button class="btn btn-transparent me-2">
-                <img class="bi bi-cart" src="{% static "deps/icons/basket2-fill.svg" %}" style="width: 24px; height: 24px;">
-            </button>
-            <button class="btn btn-transparent">Вход</button>
-        </div>
-    </header>
     {% comment "" %}
     <header class="w-100 d-none d-md-block" style="position: fixed; z-index:100; background:none; background-color: none;">
         <nav class="navbar navbar-expand-lg " data-bs-theme="dark" style="background: rgb(13,16,23); ">
