@@ -1,0 +1,17 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main  # Замените на вашу основную ветку
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Restart service
+        run: |
+          ssh mkey@77.51.222.62 'sudo systemctl restart mkey'
