@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
     <link rel="stylesheet" href="{% static "deps/css/bootstrap/bootstrap.min.css" %}">
     <link rel="stylesheet" href="{% static "deps/css/my_css.css" %}">
+    <link rel="stylesheet" href="{% static "deps/css/style.css" %}">
     
     <!-- Стиль footer-a для главной страницы -->
     {% block css %}
@@ -26,8 +27,8 @@
     <title>{{title}}</title>
 </head>
 
-<body style="background-image: none; background-color: rgb(36, 36, 36);">
-    {% comment "" %}
+<body>
+    
     <header class="w-100 d-none d-md-block">
         <div class="row">
             <div class="col-md-3">
@@ -41,8 +42,8 @@
             </div>
         </div>
     </header>
-    {% endcomment %}
     
+    {% comment "" %}
     <header class="w-100 d-none d-md-block" style="position: fixed; z-index:100; background:none; background-color: none;">
         <nav class="navbar navbar-expand-lg " data-bs-theme="dark" style="background: rgb(13,16,23); ">
             
@@ -229,7 +230,7 @@
             </div>
         </nav>
     </header>
-      
+    {% endcomment %}  
     <header class="w-100 d-md-none nav-header-block-mb">
         <div class="container-fluid ">
             <div class="row">
