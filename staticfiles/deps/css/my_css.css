@@ -35,6 +35,23 @@ body {
   background: rgb(36, 36, 36);
   height: 100%;
 }
+.button-click-catalog-game {
+  margin-top: 2.8%;
+}
+.button-click-catalog-game img{
+  width: 24px;
+  height: 24px;
+}
+.button-click-catalog-game a{
+  border: 2px solid rgba(247, 185, 93, 0.5);
+  text-decoration: none;
+  color: rgb(165, 165, 165);
+  font-size: 12px;
+ 
+  font-family: 'Multiround';
+  padding: 8px 5px;
+  border-radius: 5px;
+}
 .bg-header{
   background-image: url("../images/bg03.jpg");
   
@@ -632,7 +649,7 @@ background: linear-gradient(9deg, rgba(135,21,21,0.9836309523809523) 19%, rgba(1
 }
 .d-searches{
   
-  max-width: 60%;
+  max-width: 100%;
   margin-right: 12%;
 }
 .d-searches{
@@ -1017,12 +1034,12 @@ footer {
     
   }
 }
-.logo-title-name img{
+/*Header шапка*/
+.logo-header-title img{
   margin-left: 5%;
   float:left;
   width: 58px;
-  height: 64px;
-  
+  height: 59px;
 }
 /*Профиль*/
 .menu-profile a{

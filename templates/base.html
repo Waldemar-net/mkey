@@ -28,19 +28,46 @@
 </head>
 
 <body>
-    
     <header class="w-100 d-none d-md-block">
-        <div class="row">
-            <div class="col-md-3">
-                <a class="navbar-brand logo-title-name" href="{% url "main:index" %}"><img class="navbar-brand " src="{% static "deps/favicon/mkey.png" %}"></a>
-            </div>
-            <div class="col">
-                
-            </div>
-            <div class="col-md-3">
-
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 p-2">
+                    <a class="logo-header-title" href="{% url "main:index" %}"><img class="navbar-brand " src="{% static "deps/favicon/mkey.png" %}"></a>
+                </div>
+                <div class="col" >
+                    <div class="row" >
+                        <div class="col-md-2 button-click-catalog-game">
+                            <a  href="#" role="button"
+                                data-bs-toggle="dropdown"  aria-expanded="false"><img src="{% static "deps/icons/menu.svg" %}" alt="">Каталог игр
+                            </a>
+                        </div>
+                        <div class="col p-2" >
+                            <div class='d-searches mt-2 w-100'>
+                                <form class="d-flex w-100 "  role="search" action="{% url "catalog:search" %}" method="get">
+                                    <input class="form-control d-search w-100"   name="q"  type="search" placeholder="Поиск" aria-label="Search">
+                                    <input class="text-white me-1 p-2 mt-2" type="submit" value=""></input>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="col-md-3">
+                    <div class="col d-profile-right-btns image-bar-user ">
+                        {% if user.is_authenticated %} 
+                            {% if user.image %}
+                                <a href="{% url "users:profile" %}"  style="float:right; "
+                                >{{user.username}}<img src="/media/{{user.image}}" alt=""></a>
+                            {% else %}
+                                <a href="{% url "users:profile" %}" style="float:right; "
+                                >{{user.username}}<img src="{% static "/deps/images/baseavatar.png" %}" alt=""></a>
+                            {% endif %}
+                        {% endif %} 
+                    </div>
+                </div>
             </div>
         </div>
+            
     </header>
     
     {% comment "" %}
