@@ -153,10 +153,10 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_URL = '/user/login'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.spaceweb.ru'
+EMAIL_HOST = '77.51.222.62'
 EMAIL_PORT = 465
 EMAIL_USE_SSL = True
-EMAIL_HOST_USER = 'no-reply@mkey.top'
-EMAIL_HOST_PASSWORD = 'WEBFMRQMXE#SAM5t'
+EMAIL_HOST_USER = 'info@mkey.top'
+EMAIL_HOST_PASSWORD = 'Volodika2020'
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

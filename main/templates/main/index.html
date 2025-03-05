@@ -14,7 +14,9 @@
 {%tag_products_sale as product_sale%}
 {%tag_products_podbor as product_podbor%}
 
-<div class=" container-fluid" style="padding: 2% 0; background: rgb(18,18,18);">
+<div class="container-fluid" style="background: rgb(18,18,18);">
+    
+
     <div class="display-top-pad">
         <div class="slider single-item"> 
             {% for game in product %}
@@ -88,7 +90,7 @@
     
 </div>
 
-
+    {% comment "" %}
 {% for category in categories %}
     {% if category.is_displayed and category.slug != 'all' %}
     <div class="mt-1">
@@ -209,5 +211,6 @@
         
     </div>
 </footer>
+{% endcomment %}
 {% endblock %}
 
