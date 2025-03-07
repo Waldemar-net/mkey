@@ -28,123 +28,119 @@
 </head>
 
 <body>
-    
-    <header class="w-100 d-none d-md-block">
-        <div class="container-fluid ">
-            <div class="row container-header">
-                <div class="col-md-1 ">
-                    <a class="logo-header-title" href="{% url "main:index" %}"><img class="navbar-brand " src="{% static "deps/favicon/mkey.png" %}"></a>
-                    
-                </div>
-                <div class="col mt-2" >
-                    <div class="row" >
-                        <div class="col-md-3 button-click-catalog-game">
-                            <a  href="#" role="button"
+    <main>
+        <header>
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-xl-2 col-md-2  container-header">
+                        <a class="logo-header-title" href="{% url "main:index" %}"><img class="navbar-brand " src="{% static "deps/favicon/mkey.png" %}"></a>
+                        
+                    </div>
+                    <div class="col-xl-7 col-md-7 mt-3" >
+                        <div class="row" style=""> 
+                            <div class="col-xl-3 col-md-4 button-click-catalog-game" style="">
+                                <a  href="#" role="button"
                                 data-bs-toggle="dropdown"  aria-expanded="false"><img src="{% static "deps/icons/menu.svg" %}" alt="">Каталог игр
-                            </a>
-                            <ul class="dropdown-menu mt-2 d-catalog" style="width:900px;">
-                                <div class="container d-none d-md-block">
-                                    <div class="row  ">
-                                        <div class="col wlog">
-                                            <ul class="list-group list-group-flush ">
-                                                <h5 class="top-title-menu" id="offcanvasNavbarLabel">Категории</h5>
-                                                {%tag_categories as categories%}
-                                                {% for category in  categories %}
+                                </a>
+                              
+                                <ul class="dropdown-menu mt-2 d-catalog" style="width:900px;">
+                                    <div class="container d-none d-md-block">
+                                        <div class="row ">
+                                            <div class="col wlog">
+                                                <ul class="list-group list-group-flush ">
+                                                    <h5 class="top-title-menu" id="offcanvasNavbarLabel">Категории</h5>
+                                                    {%tag_categories as categories%}
+                                                    {% for category in  categories %}
+                                                    
+                                                        {% if category.is_displayed == True %}
+                                                            <li class="nav-item list-group-item" >
+                                                                <a class="dropdown-item text-list-menu" href="{% url "catalog:index" category.slug%}">{{category.name}}</a>
+                                                            </li>
+                                                        {% endif %}
+                                                    
+                                                    {% endfor %}
+                                                </ul>
                                                 
-                                                    {% if category.is_displayed == True %}
-                                                        <li class="nav-item list-group-item" >
-                                                            <a class="dropdown-item text-list-menu" href="{% url "catalog:index" category.slug%}">{{category.name}}</a>
-                                                        </li>
+                                                <h5 class="top-title-menu" id="offcanvasNavbarLabel">Сервис активации</h5>
+                                                <ul class="list-group list-group-flush">
+                                                    {%tag_Services as services%}
+                                                    {% for service in  services %}
+                                                    <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url "services:index" service.slug%}">{{service.name}}</a></li>
+                                                    {% endfor %}
+                                                </ul> 
+                                                
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="top-title-menu" id="offcanvasNavbarLabel">Жанры</h5>
+                                                <ul class="list-group list-group-flush ">
+                                                    {%tag_genre as genre%}
+                                                    {% for genry in  genre %}
+                                                    <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url 'catalog:index' 'all' %}?order_by=default&genry={{ genry.name|urlencode }}">{{genry.name}}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </div>    
+                                        </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <h5 class="top-title-menu" id="offcanvasNavbarLabel">Издатели</h5>
+                                                <ul class="list-group list-group-flush ">
+                                                    {%tag_publisher as publisher%}
+                                                    {% for publishers in  publisher|slice:":5" %}
+                                                    
+                                                    <li class="nav-item list-group-item "><a class="dropdown-item text-list-menu" href="{% url "publisher:publisher" publishers.slug%}">{{publishers.name}}</a></li>
+                                                    
+                                                    {% endfor %}
+                                                    {% if publisher|length >= 5 %}
+                                                        <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(180, 57, 57);" href="{% url "publishers:publishers" %}">Все издатели - {{publisher|length}}</a>
                                                     {% endif %}
-                                                
-                                                {% endfor %}
-											</ul>
-                                            
-                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Сервис активации</h5>
-                                            <ul class="list-group list-group-flush">
-                                                {%tag_Services as services%}
-                                                {% for service in  services %}
-                                                <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url "services:index" service.slug%}">{{service.name}}</a></li>
-                                                {% endfor %}
-                                            </ul> 
-                                            
+                                                </ul>
+                                            </div>
+                                            <div class="col">
+                                                <h5 class="top-title-menu" id="offcanvasNavbarLabel">Разработчики</h5>
+                                                <ul class="list-group list-group-flush">
+                                                    {%tag_developer as developer%}
+                                                    {% for developer_obj in developer|slice:"0:5" %}
+                                                        <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url "developer:developer" developer_obj.slug%}">{{ developer_obj.name }}</a></li>
+                                                    {% endfor %}
+                                                    {% if developer|length >= 5 %}
+                                                        <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(180, 57, 57);" href="{% url "developers:developers" %}">Все разработчики - {{developer|length}}</a>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
                                         </div>
-                                        <div class="col">
-                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Жанры</h5>
-                                            <ul class="list-group list-group-flush ">
-                                                {%tag_genre as genre%}
-                                                {% for genry in  genre %}
-                                                <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url 'catalog:index' 'all' %}?order_by=default&genry={{ genry.name|urlencode }}">{{genry.name}}</a></li>
-                                                {% endfor %}
-                                            </ul>
-										</div>    
+                                        
                                     </div>
-                                    <div class="row">
-                                        <div class="col">
-                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Издатели</h5>
+                                    <div class="container d-md-none">
+                                        <div class="row">
+                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Категории</h5>
                                             <ul class="list-group list-group-flush ">
-                                                {%tag_publisher as publisher%}
-                                                {% for publishers in  publisher|slice:":5" %}
-                                                
-                                                <li class="nav-item list-group-item "><a class="dropdown-item text-list-menu" href="{% url "publisher:publisher" publishers.slug%}">{{publishers.name}}</a></li>
-                                                
-                                                {% endfor %}
-                                                {% if publisher|length >= 5 %}
-                                                    <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(180, 57, 57);" href="{% url "publishers:publishers" %}">Все издатели - {{publisher|length}}</a>
+                                            {%tag_categories as categories%}
+                                            {% for category in  categories %}
+                                                {% if category.is_displayed == True %}
+                                                    <li class="nav-item list-group-item" >
+                                                        <a class="dropdown-item text-list-menu" href="{% url "catalog:index" category.slug%}">{{category.name}}</a>
+                                                    </li>
                                                 {% endif %}
+                                            {% endfor %} 
                                             </ul>
                                         </div>
-                                        <div class="col">
-                                            <h5 class="top-title-menu" id="offcanvasNavbarLabel">Разработчики</h5>
-                                            <ul class="list-group list-group-flush">
-                                                {%tag_developer as developer%}
-                                                {% for developer_obj in developer|slice:"0:5" %}
-                                                    <li class="nav-item list-group-item"><a class="dropdown-item text-list-menu" href="{% url "developer:developer" developer_obj.slug%}">{{ developer_obj.name }}</a></li>
-                                                {% endfor %}
-                                                {% if developer|length >= 5 %}
-                                                    <a class="dropdown-item text-list-menu" style="font-size:11px; color: rgb(180, 57, 57);" href="{% url "developers:developers" %}">Все разработчики - {{developer|length}}</a>
-                                                {% endif %}
-                                            </ul>
-                                        </div>
-                                    </div>
-									
-								</div>
-								<div class="container d-md-none">
-                                    <div class="row">
-                                        <h5 class="top-title-menu" id="offcanvasNavbarLabel">Категории</h5>
-                                        <ul class="list-group list-group-flush ">
-                                        {%tag_categories as categories%}
-                                        {% for category in  categories %}
-                                            {% if category.is_displayed == True %}
-                                                <li class="nav-item list-group-item" >
-                                                    <a class="dropdown-item text-list-menu" href="{% url "catalog:index" category.slug%}">{{category.name}}</a>
-                                                </li>
-                                            {% endif %}
-                                        {% endfor %} 
-                                        </ul>
-									</div>
-                                </div>    
-                            </ul>
-                        </li>
-                    </ul>
-                        </div>
-                        <div class="col " >
-                            <div class='d-searches  w-100 '>
-                                <form class="d-flex w-100 "  role="search" action="{% url "catalog:search" %}" method="get">
-                                    <input class="form-control d-search w-100"   name="q"  type="search" placeholder="Поиск" aria-label="Search">
-                                    <input class="text-white me-1 p-2 me-2 mt-2" type="submit" value="" style="margin-left: 10px;"></input>
+                                    </div>    
+                                </ul>
+                               
+                            </div>
+                            <div class="col-xl-9 col-md-6 d-searches text-center">
+                                <form class="d-flex "  role="search" action="{% url "catalog:search" %}" method="get">
+                                    <input class="form-control d-search"   name="q"  type="search" placeholder="Поиск" aria-label="Search">
+                                    <input class="text-white mt-2 ms-3" type="submit" value=""></input>
                                 </form>
                             </div>
                         </div>
                     </div>
-                    
-                </div>
-                <div class="col-md-2 mt-2 button-click-authetification-profile">
-                    <div class="row">
-                        
-                        <div class="col cart-like-user-game">
-                            <div class="like-carts">
-                                <div class="control-profile">
+                    <div class="col-xl-3 col-md-3 mt-3" >
+                        <div class=" button-click-authetification-profile" style="background: rgb(20,20,20); ">
+                            
+                            <div class="control-profile" >
+                                
                                     {% if not user.is_authenticated %}
                             
                                         <a href="{% url "users:login" %}">Войти</a>
@@ -174,68 +170,32 @@
                                         </ul>
                                     </li>
                                 {% endif %}
-                                </div>
-                                <div class="control-carts">
-                                    <a href="{% url "users:users-cart" %}" class="d-none d-md-block"  
-                                    aria-expanded="false" >
-                                    <img class="" src="{% static "deps/icons/basket2-fill.svg" %}"  
-                                        >
-                                    <span id="goods-in-cart-count" style="font-family:'Multiround'; color: rgb(247, 185, 93);">{{carts|length}}</span>
-                                    </a>
-                                </div>
                                 
-                                <div class="control-like">
-                                    <a href="{% url "users:users-cart" %}" class=" d-none d-md-block"  
-                                        aria-expanded="false" >
-                                        <img class="" src="{% static "deps/icons/like.svg" %}" >
-                                        <span id="goods-in-cart-count" style="font-family:'Multiround'; color: rgb(247, 185, 93);">{{carts|length}}</span>
-                                    </a>
-                                </div>
-                                
-                                
-                                
+                            </div>
+                            <div class="like-carts" >
+                                <a href="{% url "users:users-cart" %}" class="d-none d-md-block"  
+                                aria-expanded="false" >
+                                <img class="" src="{% static "deps/icons/like.svg" %}"  
+                                    >
+                                <span id="goods-in-cart-count" style="font-family:'Multiround'; color: rgb(247, 185, 93);">{{carts|length}}</span>
+                                </a>
+                            </div>
+                            
+                            <div class="like-carts">
+                                <a href="{% url "users:users-cart" %}" class="d-none d-md-block"  
+                                aria-expanded="false" >
+                                <img class="" src="{% static "deps/icons/basket2-fill.svg" %}"  
+                                    >
+                                <span id="goods-in-cart-count" style="font-family:'Multiround'; color: rgb(247, 185, 93);">{{carts|length}}</span>
+                                </a>
                             </div>
                             
                         </div>
-                        {% comment "" %}
-                        <div class="col-md-4 profile-loggined" >
-                            {% if not user.is_authenticated %}
-                            
-                                <a href="{% url "users:login" %}">Войти</a>
-                        
-                            {% else %}
-                        
-                            <li class=" dropdown d-none d-md-block  ">
-                                {% if user.image %}
-                                    <a href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false"><img src="/media/{{user.image}}" alt=""></a>
-                                {% else %}
-                                    <a href="#" role="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false"><img src="{% static "/deps/images/baseavatar.png" %}" alt=""></a>
-                                {% endif %}
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item  text-white" href="{% url "users:profile" %}">Личный кабинет</a>
-                                    </li>
-                                    {% if  user.is_admin or user.is_staff %}
-                                        <li><a class="dropdown-item  text-white" href="{% url "admin:index" %}">Админ панель</a></li>
-                                        <li><a class="dropdown-item  text-white" href="{% url "main:admin-panel" %}">Служебное помещение</a></li>
-                                    {% endif %}
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item  text-white" href="{% url "users:logout" %}">Выйти</a></li>
-                                    
-                                </ul>
-                            </li>
-                        {% endif %}
-                        </div>
-                        {% endcomment %}
                     </div>
                 </div>
             </div>
-        </div>
-            
-    </header>
+        </header>
+    </main>
     {% comment "" %}
     <header class="w-100 d-none d-md-block" style="position: fixed; z-index:100; background:none; background-color: none;">
         <nav class="navbar navbar-expand-lg " data-bs-theme="dark" style="background: rgb(13,16,23); ">

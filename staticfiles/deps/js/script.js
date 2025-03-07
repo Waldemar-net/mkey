@@ -253,3 +253,14 @@ $('.center').slick({
     }
   ]
 });
+$(document).ready(function() {
+  $('.category-link').on('click', function(e) {
+      
+
+      // Убираем класс active у всех родительских элементов
+      $('.panel-categories-views').removeClass('active');
+
+      // Добавляем класс active к родительскому элементу
+      $(this).parent().addClass('active'); // Используем .parent() для добавления класса к родителю
+  });
+});

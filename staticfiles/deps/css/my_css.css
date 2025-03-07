@@ -55,7 +55,9 @@ body {
 }
 .container-header{
   padding: 10px 0;
+  
 }
+
 .control-profile img{
   float: right;
   width: 32px;
@@ -69,14 +71,14 @@ body {
   text-decoration: none;
   color: rgb(165, 165, 165);
   font-size: 12px;
-  border-radius: 5px;
+  
   font-family: 'Multiround';
   padding: 10px 10px;
   
 }
 .like-carts{
   background-color: rgb(20, 20, 20);
-  border-radius: 5px;
+  
 }
 .cart-like-user-game a{
   float: right;
@@ -104,7 +106,33 @@ body {
 
 /*Шапка*/
 /*Slider*/
+.navigations-panel-categories-views p{
+  color: rgb(175, 175, 175);
+}
+.panel-categories-views{
+  width: auto !important;
+ 
+  background-color: rgb(42, 42, 42);
+  padding-bottom: 5px;
+}
 
+.panel-categories-views a{
+
+  
+  text-decoration: none;
+  color: rgb(228, 228, 228);
+  font-family: 'Multiround';
+  font-size: 11px;
+  padding: 5px 8px;
+
+}
+.panel-categories-views:hover{
+  background-color: rgb(63, 63, 63);
+}
+
+.panel-categories-views.active {
+  background-color: rgb(164, 164, 164);
+}
 /*End Slider*/
 .bg-header{
  
@@ -709,18 +737,11 @@ background: linear-gradient(9deg, rgba(135,21,21,0.9836309523809523) 19%, rgba(1
 .d-profile-right-btn{
   list-style: none;
 }
-.d-searches{
-  
-  max-width: 100%;
-  margin-right: 12%;
-}
-.d-searches{
-  background-color: rgb(51, 51, 51);
-}
+
 
 .d-searches input[type="search"]{
   padding: 10px 10px;
-  max-width: 100%;
+  
   border-radius: 0;
   box-shadow: none;
   font-family:'Multiround';
@@ -1824,15 +1845,7 @@ footer {
     font-size: 10px; 
   }
 }
-.block-gaming{
-  padding: 1% 1%; 
-  color:rgb(235,235,235); 
-  font-family:'Multiround'; 
-  font-size: 20px; 
-  
-  border-radius: 5px;
 
-}
 .image-bar-user{
   border-radius: 30px;
   
@@ -2540,7 +2553,7 @@ footer {
   border: 2px solid rgba(247, 185, 93,0.4);
 }
 .display-top-pad{
-  margin-top: 90px;
+  margin-top: 10px;
 }
 @media (max-width: 768px) {
   .d_title_poster {
@@ -2580,10 +2593,7 @@ footer {
   .d_discount_price_s s {
     font-size: 9px; /* Уменьшите размер шрифта для цены */
   }
-  .block-gaming{
-    font-size: 12px;
-    padding-left: 10px;
-  }
+
   .d_discount_price_s a {
       font-size: 9px; /* Уменьшите размер шрифта для ссылок */
       padding: 5px; /* Уменьшите отступы для ссылок */

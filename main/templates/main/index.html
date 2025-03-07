@@ -14,9 +14,7 @@
 {%tag_products_sale as product_sale%}
 {%tag_products_podbor as product_podbor%}
 
-<div class="container-fluid" style="background: rgb(18,18,18);">
-    
-
+<div class="container-fluid">
     <div class="display-top-pad">
         <div class="slider single-item"> 
             {% for game in product %}
@@ -89,7 +87,26 @@
     </div>
     
 </div>
-
+<div class="container mt-3">
+    <div class="row">
+        <div class="col text-center">
+            <div class="navigations-panel-categories-views">
+                <div class="row navigations-panel" style="align-items: center; justify-content: center;">
+                   
+                    {% for category in categories %}
+                        {% if category.is_displayed and category.slug != 'all' %}
+                        
+                            <div class="panel-categories-views">
+                                <a href="#" class="category-link">{{ category.name }}</a>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     {% comment "" %}
 {% for category in categories %}
     {% if category.is_displayed and category.slug != 'all' %}
