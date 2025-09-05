@@ -91,9 +91,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mkey',
         'USER' : 'mkey',
-        'PASSWORD' : 'Volodika20',
-        'HOST' : 'localhost',
-        'PORT' : '5432',
+        'PASSWORD' : '',
+        'HOST' : '',
+        'PORT' : '',
     }
 }
 
@@ -160,3 +160,4 @@ EMAIL_HOST_USER = 'info@mkey.top'
 EMAIL_HOST_PASSWORD = 'Volodika2020'
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
